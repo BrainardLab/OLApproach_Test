@@ -24,7 +24,10 @@ names = OLGetBackgroundNames('alternateDictionaryFunc',backgroundAlternateDictio
 names = OLGetDirectionNames('alternateDictionaryFunc',directionAlternateDictionary)
 
 % Tests OLGetWaveformyNames
-names = OLGetDirectionNames('alternateDictionaryFunc',waveformAlternateDictionary)
+names = OLGetWaveformNames('alternateDictionaryFunc',waveformAlternateDictionary)
+
+%% Can we still see the original dictionaries
+names = OLGetWaveformNames
 
 %% Get params
 %
