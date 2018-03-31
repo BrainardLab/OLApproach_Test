@@ -7,16 +7,27 @@
 % History:
 %   03/31/18  dhb  Wrote it.
 
-% Clear
+%% Clear
 clear; close all;
 
 % Define altnernate dictionary function.
 backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Test';
+directionAlternateDictionary = 'OLDirectionParamsDictionary_Test';
 
-% List entries
-%   Tests OLGetBackgroundNames and OLGetDictionaryNames.
+%% List entries
+%
+% Tests OLGetBackgroundNames and OLGetDictionaryNames.
 names = OLGetBackgroundNames('alternateDictionaryFunc',backgroundAlternateDictionary)
 
-% Get params
+% Tests OLGetDictionaryNames
+names = OLGetDirectionNames('alternateDictionaryFunc',directionAlternateDictionary)
+
+%% Get params
+%
+% Background
 backgroundParams = OLBackgroundParamsFromName('Test',...
     'alternateDictionaryFunc',backgroundAlternateDictionary);
+
+% Directions
+backgroundParams = OLDirectionParamsFromName('TestDir',...
+    'alternateDictionaryFunc',directionAlternateDictionary);

@@ -1,14 +1,12 @@
-function dictionary = OLBackgroundParamsDictionary_ContrastResponseFunction()
+function dictionary = OLBackgroundParamsDictionary_Test()
 % Defines a dictionary with parameters for named nominal backgrounds
 %
 % Syntax:
-%   dictionary = OLBackgroundParamsDictionary()
+%   dictionary = OLBackgroundParamsDictionary_Test()
 %
 % Description:
 %    Define a dictionary of named backgrounds of modulation, with
-%    corresponding nominal parameters. Types of backgrounds, and their
-%    corresponding fields, are defined in OLBackgroundParamsDefaults
-%    and validated by OLBackgroundParamsValidate.
+%    corresponding nominal parameters.
 %
 % Inputs:
 %    None.
@@ -29,9 +27,9 @@ function dictionary = OLBackgroundParamsDictionary_ContrastResponseFunction()
 %    OLMakeDirectionNominalPrimaries.
 
 % History:
-%    06/28/17  dhb  Created from OneLightToolbox version. Remove
-%    alternateDictionaryFunc key/value pair, since this would be called as
-%    the result of that.
+%    03/31/18  dhb  Created from OneLightToolbox version. Remove
+%                   alternateDictionaryFunc key/value pair, since this
+%                   would be called as the result of that.
 
 % Initialize dictionary
 dictionary = containers.Map();
