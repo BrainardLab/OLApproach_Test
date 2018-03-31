@@ -13,6 +13,7 @@ clear; close all;
 % Define altnernate dictionary function.
 backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Test';
 directionAlternateDictionary = 'OLDirectionParamsDictionary_Test';
+waveformAlternateDictionary = 'OLWaveformParamsDictionary_Test';
 
 %% List entries
 %
@@ -22,6 +23,9 @@ names = OLGetBackgroundNames('alternateDictionaryFunc',backgroundAlternateDictio
 % Tests OLGetDictionaryNames
 names = OLGetDirectionNames('alternateDictionaryFunc',directionAlternateDictionary)
 
+% Tests OLGetWaveformyNames
+names = OLGetDirectionNames('alternateDictionaryFunc',waveformAlternateDictionary)
+
 %% Get params
 %
 % Background
@@ -29,5 +33,9 @@ backgroundParams = OLBackgroundParamsFromName('Test',...
     'alternateDictionaryFunc',backgroundAlternateDictionary);
 
 % Directions
-backgroundParams = OLDirectionParamsFromName('TestDir',...
+directionParams = OLDirectionParamsFromName('TestDir',...
     'alternateDictionaryFunc',directionAlternateDictionary);
+
+% Directions
+waveformParams = OLDirectionParamsFromName('TestWav',...
+    'alternateDictionaryFunc',waveformAlternateDictionary);

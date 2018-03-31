@@ -55,7 +55,7 @@ params.whichReceptorsToIgnore = {[]};
 params.whichReceptorsToMinimize = {[]};
 params.directionsYoked = [0];
 params.directionsYokedAbs = [0];
-params.name = 'Test' %OLBackgroundNameFromParams(params);
+params.name = 'Test'; %OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;

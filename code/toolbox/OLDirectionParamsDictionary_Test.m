@@ -49,7 +49,7 @@ params.whichReceptorsToIsolate = [4];
 params.whichReceptorsToIgnore = [];
 params.whichReceptorsToMinimize = [];
 params.backgroundName = 'Test'; %'MelanopsinDirected_275_80_667';
-params.name = 'TestDir' %OLDirectionNameFromParams(params);
+params.name = 'TestDir'; %OLDirectionNameFromParams(params);
 if OLDirectionParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
