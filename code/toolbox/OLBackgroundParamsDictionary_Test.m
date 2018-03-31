@@ -1,0 +1,66 @@
+function dictionary = OLBackgroundParamsDictionary_ContrastResponseFunction()
+% Defines a dictionary with parameters for named nominal backgrounds
+%
+% Syntax:
+%   dictionary = OLBackgroundParamsDictionary()
+%
+% Description:
+%    Define a dictionary of named backgrounds of modulation, with
+%    corresponding nominal parameters. Types of backgrounds, and their
+%    corresponding fields, are defined in OLBackgroundParamsDefaults
+%    and validated by OLBackgroundParamsValidate.
+%
+% Inputs:
+%    None.
+%
+% Outputs:
+%    dictionary         -  Dictionary with all parameters for all desired
+%                          backgrounds
+%
+% Optional key/value pairs:
+%    None.
+%
+% Notes:
+%    None.
+%
+% See also: 
+%    OLBackgroundParams, OLBackgroundNomimalPrimaryFromParams,
+%    OLBackgroundNominalPrimaryFromName, OLDirectionParamsDictionary,
+%    OLMakeDirectionNominalPrimaries.
+
+% History:
+%    06/28/17  dhb  Created from OneLightToolbox version. Remove
+%    alternateDictionaryFunc key/value pair, since this would be called as
+%    the result of that.
+
+% Initialize dictionary
+dictionary = containers.Map();
+
+%% Test
+% Background to allow maximum unipolar contrast melanopsin modulation
+%   Field size: 27.5 deg
+%   Pupil diameter: 8 mm
+%   bipolar contrast: 66.7%
+%
+% Bipolar contrast is specified to generate, this background is also used
+% for a 400% unipolar pulse
+params = OLBackgroundParams_Optimized;
+params.baseName = 'Test';
+params.primaryHeadRoom = 0.01;
+params.baseModulationContrast = 4/6;
+params.fieldSizeDegrees = 27.5;
+params.pupilDiameterMm = 8;
+params.photoreceptorClasses = {'LConeTabulatedAbsorbance','MConeTabulatedAbsorbance','SConeTabulatedAbsorbance','Melanopsin'};
+params.modulationContrast = 4/6;
+params.whichReceptorsToIsolate = {[4]};
+params.whichReceptorsToIgnore = {[]};
+params.whichReceptorsToMinimize = {[]};
+params.directionsYoked = [0];
+params.directionsYokedAbs = [0];
+params.name = 'Test' %OLBackgroundNameFromParams(params);
+if OLBackgroundParamsValidate(params)
+    % All validations OK. Add entry to the dictionary.
+    dictionary(params.name) = params;
+end
+
+end
