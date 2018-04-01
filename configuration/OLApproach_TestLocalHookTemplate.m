@@ -1,11 +1,11 @@
 function OLApproach_TestLocalHook
-% OLApproach_PsychophysicsLocalHook - Configure things for working on OneLight projects.
+% Configure things for working on OneLight projects.
 %
 % For use with the ToolboxToolbox.  If you copy this into your
 % ToolboxToolbox localToolboxHooks directory (by default,
 % ~/localToolboxHooks) and delete "LocalHooksTemplate" from the filename,
 % this will get run when you execute
-%   tbUseProject('OLApproach_PsychophysicsLocalHook')
+%   tbUseProject('OLApproach_Test')
 % to set up for this project.  You then edit your local copy to match your local machine.
 %
 % The main thing that this does is define Matlab preferences that specify input and output
@@ -15,12 +15,12 @@ function OLApproach_TestLocalHook
 % to match what is true on your computer.
 
 %% Say hello
-fprintf('Running OLApproach_Test local hook\n');
 theApproach = 'OLApproach_Test';
+fprintf('Running %s local hook\n',theApproach);
 
 %% Define protocols for this approach
 theProtocols = { ...
-    'OLApproach_Test_Test' ...
+    'OLApproach_Test_Protocol1' ...
     };
 
 %% Remove old preferences
