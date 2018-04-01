@@ -1,4 +1,4 @@
-function [ MaxLMSDirection, MaxMelDirection, LightFluxDirection ] = testGenerateNominalDirections(calibrationType, observerAge)
+function [ MaxLMSDirection, MaxMelDirection, LightFluxDirection_540_380 ] = testGenerateNominalDirections(calibrationType, observerAge)
 % Function to compute nominal backgrounds and directions based on
 % calibration type and subject age
 
@@ -36,7 +36,10 @@ testGenerateNominalDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04', 57)
 %}
 
 %% Parameters
-TEST_LIGHTFLUX = false;
+%
+% Always test MAXLMS because we use that to get a common set of receptors.
+TEST_MAXMEL = false;
+TEST_LIGHTFLUX_540_380 = true;
 
 %% Define altnernate dictionary functions.
 backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Test';
@@ -47,6 +50,7 @@ waveformAlternateDictionary = 'OLWaveformParamsDictionary_Test';
 % set up the calibrationStructure
 protocolParams.calibrationType = calibrationType;
 calibration = OLGetCalibrationStructure('CalibrationType',protocolParams.calibrationType,'CalibrationDate','latest');
+nDirections = 0;
 
 % Set up some information about our theoretical observer
 protocolParams.observerID = '';
@@ -61,14 +65,9 @@ protocolParams.simulate.makePlots = false;
 % Make the oneLight object
 ol = OneLight('simulate',protocolParams.simulate.oneLight,'plotWhenSimulating',protocolParams.simulate.makePlots); drawnow;
 
-%% Make nominal directionStructs, containing nominal primaries
-% First we get the parameters for the directions from the dictionary. Then
-% generate the OLDirections
-MaxMelParams = OLDirectionParamsFromName('MaxMel_unipolar_275_60_667', ...
-    'alternateDictionaryFunc', directionAlternateDictionary);
-[MaxMelDirection, MaxMelBackground] = OLDirectionNominalFromParams(MaxMelParams, calibration, ...
-    'observerAge',protocolParams.observerAgeInYrs, ...
-    'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
+%% MaxLMS test
+nDirections = nDirections+1;
+directions{nDirections} = 'MaxLMSDirection';
 
 MaxLMSParams = OLDirectionParamsFromName('MaxLMS_unipolar_275_60_667', ...
     'alternateDictionaryFunc', directionAlternateDictionary);
@@ -76,37 +75,49 @@ MaxLMSParams = OLDirectionParamsFromName('MaxLMS_unipolar_275_60_667', ...
     'observerAge',protocolParams.observerAgeInYrs, ...
     'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 
-if (TEST_LIGHTFLUX)
+
+%% MaxMel
+if (TEST_MAXMEL)
+    nDirections = nDirections+1;
+    directions{nDirections} = 'MaxMelDirection';
+    
+    MaxMelParams = OLDirectionParamsFromName('MaxMel_unipolar_275_60_667', ...
+        'alternateDictionaryFunc', directionAlternateDictionary);
+    [MaxMelDirection, MaxMelBackground] = OLDirectionNominalFromParams(MaxMelParams, calibration, ...
+        'observerAge',protocolParams.observerAgeInYrs, ...
+        'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
+end
+
+%% Light flux at one chrom
+if (TEST_LIGHTFLUX_540_380)
+    nDirections = nDirections+1;
+    directions{nDirections} = 'LightFluxDirection_540_380';
+    
     LightFluxParams = OLDirectionParamsFromName('LightFlux_540_380_50', ...
         'alternateDictionaryFunc', directionAlternateDictionary);
-    [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, calibration, ...
-        'observerAge',protocolParams.observerAgeInYrs, ...
+    [LightFluxDirection_540_380, LightFluxBackground_540_380] = OLDirectionNominalFromParams(LightFluxParams, calibration, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 end
 
 %% Simulate validation to easily determine the contrast in our nominal OLDirections
 %
+% Assuming that all directions use same receptors as MaxLMS.  OK for
+% testing here.
 receptors = MaxLMSDirection.describe.directionParams.T_receptors;
 receptorStrings = MaxLMSDirection.describe.directionParams.photoreceptorClasses;
-
-MaxMelDirection.describe.validation = OLValidateDirection(MaxMelDirection,MaxMelBackground,ol,radiometer,...
-    'receptors',receptors);
 MaxLMSDirection.describe.validation = OLValidateDirection(MaxLMSDirection,MaxLMSBackground,ol,radiometer,...
     'receptors',receptors);
-if (TEST_LIGHTFLUX)
-    LightFluxDirection.describe.validation = OLValidateDirection(LightFluxDirection,LightFluxBackground,ol,radiometer,...
+if (TEST_MAXMEL)
+    MaxMelDirection.describe.validation = OLValidateDirection(MaxMelDirection,MaxMelBackground,ol,radiometer,...
+        'receptors',receptors);
+end
+if (TEST_LIGHTFLUX_540_380)
+    LightFluxDirection_540_380.describe.validation = OLValidateDirection(LightFluxDirection_540_380,LightFluxBackground_540_380,ol,radiometer,...
         'receptors',receptors);
 end
 
-%% Report on these nominal contrasts
+%% Report on nominal contrasts
 postreceptoralStrings = {'L+M+S', 'L-M', 'S-(L+M)'};
-if (TEST_LIGHTFLUX)
-    directions = {'MaxMelDirection', 'MaxLMSDirection', 'LightFluxDirection'};
-else
-    directions = {'MaxMelDirection', 'MaxLMSDirection'};
-end
-
-% Loop over directions
 for dd = 1:length(directions)
     direction = eval(directions{dd});
     background = eval(strrep(directions{dd},'Direction','Background'));
