@@ -35,13 +35,11 @@ function dictionary = OLWaveformParamsDictionary_Test()
 dictionary = containers.Map();
 
 %% MaxContrast3sPulse
-modulationName = 'TestWav';
+modulationName = 'MaxContrastPulse';
 type = 'pulse';
-
 params = OLWaveformParamsDefaults(type);
 params.name = modulationName;
 params.stimulusDuration = 0;
-
 if OLWaveformParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
