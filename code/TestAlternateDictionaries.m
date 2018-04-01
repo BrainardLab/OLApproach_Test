@@ -1,4 +1,4 @@
-% TestAltnerateDictionaries
+% testAltnerateDictionaries
 %
 % Description:
 %    Test the features that allow us to call alternate dictionaries.
@@ -26,19 +26,19 @@ names = OLGetDirectionNames('alternateDictionaryFunc',directionAlternateDictiona
 % Tests OLGetWaveformyNames
 names = OLGetWaveformNames('alternateDictionaryFunc',waveformAlternateDictionary)
 
-%% Can we still see the original dictionaries
+%% Can we still see an original dictionary
 names = OLGetWaveformNames
 
 %% Get params
 %
 % Background
 backgroundParams = OLBackgroundParamsFromName('Test',...
-    'alternateDictionaryFunc',backgroundAlternateDictionary);
+    'alternateDictionaryFunc',backgroundAlternateDictionary)
 
 % Directions
 directionParams = OLDirectionParamsFromName('TestDir',...
-    'alternateDictionaryFunc',directionAlternateDictionary);
+    'alternateDictionaryFunc',directionAlternateDictionary)
 
 % Directions
 waveformParams = OLDirectionParamsFromName('TestWav',...
-    'alternateDictionaryFunc',waveformAlternateDictionary);
+    'alternateDictionaryFunc',waveformAlternateDictionary)
