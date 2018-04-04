@@ -93,7 +93,7 @@ params = OLBackgroundParams_LightFluxChrom;
 params.baseName = 'LightFlux';
 params.lightFluxDesiredXY = [0.54,0.38];
 params.lightFluxDownFactor = 5;
-params.primaryHeadRoom = 0.00;
+params.primaryHeadRoom = 0.1;
 params.name = OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
