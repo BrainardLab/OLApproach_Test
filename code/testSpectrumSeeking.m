@@ -2,8 +2,9 @@
 simulate = false;
 
 %% Get calibration
-calibrationType = 'BoxDRandomizedLongCableBEyePiece2_ND01'; % psychophysics room
-calibration = OLGetCalibrationStructure('CalibrationType',calibrationType,'CalibrationDate','latest');
+calibrationApproach = 'Psychophysics'; % test on psychophysics rig
+calibration = OLGetCalibrationStructure('CalibrationDate','latest',...
+    'CalibrationFolder',getpref('OLApproach_Psychophysics','OneLightCalDataPath'));
 
 %% Open hardware
 onelight = OneLight('simulate',simulate,'plotWhenSimulating',false); drawnow;
