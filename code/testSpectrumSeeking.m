@@ -25,6 +25,11 @@ end
 observerAge = 32;
 MaxMelParams = OLDirectionParamsFromName('MaxMel_unipolar_275_60_667');
 [ MaxMelDirection, MaxMelBackground ] = OLDirectionNominalFromParams(MaxMelParams, calibration, 'observerAge',observerAge);
+receptors = MaxMelDirection.describe.directionParams.T_receptors;
+
+%% Validate pre-correction
+OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'pre-correction');
+OLValidateDirection(MaxMelDirection, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'pre-correction');
 
 %% Correct
 % dataWrapper = makeFakeCache(MaxMelDirection);
@@ -50,4 +55,6 @@ MaxMelParams = OLDirectionParamsFromName('MaxMel_unipolar_275_60_667');
 % OLCorrectDirection will correct both direction and background
 OLCorrectDirection(MaxMelDirection,MaxMelBackground,onelight,radiometer);
     
-%% Validate
+%% Validate post-correction
+OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
+OLValidateDirection(MaxMelDirection, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
