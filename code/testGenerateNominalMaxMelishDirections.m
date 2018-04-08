@@ -49,7 +49,7 @@ waveformAlternateDictionary = 'OLWaveformParamsDictionary_Test';
 %% Set some stuff up
 % set up the calibrationStructure
 protocolParams.calibrationType = calibrationType;
-calibration = OLGetCalibrationStructure('CalibrationType',protocolParams.calibrationType,'CalibrationDate','latest');
+cal = OLGetCalibrationStructure('CalibrationType',protocolParams.calibrationType,'CalibrationDate','latest');
 nDirections = 0;
 
 % Set up some information about our theoretical observer
@@ -71,7 +71,7 @@ directions{nDirections} = 'MaxLMSDirection';
 
 MaxLMSParams = OLDirectionParamsFromName('MaxLMS_unipolar_275_60_667', ...
     'alternateDictionaryFunc', directionAlternateDictionary);
-[MaxLMSDirection, MaxLMSBackground] = OLDirectionNominalFromParams(MaxLMSParams, calibration, ...
+[MaxLMSDirection, MaxLMSBackground] = OLDirectionNominalFromParams(MaxLMSParams, cal, ...
     'observerAge',protocolParams.observerAgeInYrs, ...
     'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 
@@ -83,7 +83,7 @@ if (TEST_MAXMEL)
     
     MaxMelParams = OLDirectionParamsFromName('MaxMel_unipolar_275_60_667', ...
         'alternateDictionaryFunc', directionAlternateDictionary);
-    [MaxMelDirection, MaxMelBackground] = OLDirectionNominalFromParams(MaxMelParams, calibration, ...
+    [MaxMelDirection, MaxMelBackground] = OLDirectionNominalFromParams(MaxMelParams, cal, ...
         'observerAge',protocolParams.observerAgeInYrs, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 end
@@ -95,7 +95,7 @@ if (TEST_LIGHTFLUX_540_380)
     
     LightFluxParams = OLDirectionParamsFromName('LightFlux_540_380_50', ...
         'alternateDictionaryFunc', directionAlternateDictionary);
-    [LightFluxDirection_540_380, LightFluxBackground_540_380] = OLDirectionNominalFromParams(LightFluxParams, calibration, ...
+    [LightFluxDirection_540_380, LightFluxBackground_540_380] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 end
 
@@ -116,8 +116,15 @@ if (TEST_LIGHTFLUX_540_380)
         'receptors',receptors);
 end
 
+%% Load XYZ functions according to chosen type
+whichXYZ = 'xyzCIEPhys10';
+eval(['tempXYZ = load(''T_' whichXYZ ''');']);
+eval(['T_xyz = SplineCmf(tempXYZ.S_' whichXYZ ',683*tempXYZ.T_' whichXYZ ',cal.describe.S);']);
+
+
 %% Report on nominal contrasts
 postreceptoralStrings = {'L+M+S', 'L-M', 'S-(L+M)'};
+fprintf('<strong>%s</strong>, observer age %d\n',calibrationType, observerAge);
 for dd = 1:length(directions)
     direction = eval(directions{dd});
     background = eval(strrep(directions{dd},'Direction','Background'));
@@ -140,5 +147,14 @@ for dd = 1:length(directions)
     for ii = 1:NCombinations
         fprintf('   * <strong>%s</strong>: contrast = %0.1f%%\n',postreceptoralStrings{ii},100*postreceptoralContrasts(ii));
     end
+    
+    % Chromaticity and luminance
+    backgroundxyY = XYZToxyY(T_xyz*OLPrimaryToSpd(cal,background.differentialPrimaryValues));
+    directionxyY = XYZToxyY(T_xyz*OLPrimaryToSpd(cal,background.differentialPrimaryValues+direction.differentialPrimaryValues));
+    fprintf('\n');
+    fprintf('   * <strong>Luminance</strong>: Weber contrast = %0.1f%%\n',100*(directionxyY(3)-backgroundxyY(3))/backgroundxyY(3));
+    fprintf('   * <strong>Background x,y</strong>: %0.3f, %0.3f\n',backgroundxyY(1),backgroundxyY(2));
+    fprintf('   * <strong>Direction at max x,y</strong>: %0.3f, %0.3f\n',directionxyY(1),directionxyY(2));
+
     fprintf('\n\n');
 end
