@@ -1,4 +1,4 @@
-function [ MaxLMSDirection, MaxMelDirection, LightFluxDirection_540_380 ] = testGenerateNominalDirections(calibrationType, observerAge)
+function [MaxLMSDirection, MaxMelDirection, LightFluxDirection_540_380] = testGenerateNominalMaxMelishDirections(calibrationType, observerAge)
 % Function to compute nominal backgrounds and directions based on
 % calibration type and subject age
 
@@ -29,16 +29,16 @@ function [ MaxLMSDirection, MaxMelDirection, LightFluxDirection_540_380 ] = test
 
 % Examples:
 %{
-testGenerateNominalDirections('BoxBRandomizedLongCableAEyePiece1_ND04', 32)
+testGenerateNominalMaxMelishDirections('BoxBRandomizedLongCableAEyePiece1_ND04', 32)
 %}
 %{
-testGenerateNominalDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04', 57)
+testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04', 57)
 %}
 
 %% Parameters
 %
 % Always test MAXLMS because we use that to get a common set of receptors.
-TEST_MAXMEL = false;
+TEST_MAXMEL = true;
 TEST_LIGHTFLUX_540_380 = true;
 
 %% Define altnernate dictionary functions.
