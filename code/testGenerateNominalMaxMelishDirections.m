@@ -1,4 +1,4 @@
-function [MaxLMSDirection, MaxMelDirection, LightFluxDirection_540_380] = testGenerateNominalMaxMelishDirections(calibrationType, observerAge)
+function [MaxLMSDirection, MaxMelDirection, LightFluxDirection_590_390] = testGenerateNominalMaxMelishDirections(calibrationType, observerAge)
 % Function to compute nominal backgrounds and directions based on
 % calibration type and subject age
 
@@ -39,7 +39,7 @@ testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04
 %
 % Always test MAXLMS because we use that to get a common set of receptors.
 TEST_MAXMEL = true;
-TEST_LIGHTFLUX_540_380 = true;
+TEST_LIGHTFLUX_590_390 = true;
 
 %% Define altnernate dictionary functions.
 backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Test';
@@ -89,13 +89,13 @@ if (TEST_MAXMEL)
 end
 
 %% Light flux at one chrom
-if (TEST_LIGHTFLUX_540_380)
+if (TEST_LIGHTFLUX_590_390)
     nDirections = nDirections+1;
-    directions{nDirections} = 'LightFluxDirection_540_380';
+    directions{nDirections} = 'LightFluxDirection_590_390';
     
-    LightFluxParams = OLDirectionParamsFromName('LightFlux_540_380_50', ...
+    LightFluxParams = OLDirectionParamsFromName('LightFlux_590_390_50', ...
         'alternateDictionaryFunc', directionAlternateDictionary);
-    [LightFluxDirection_540_380, LightFluxBackground_540_380] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
+    [LightFluxDirection_590_390, LightFluxBackground_590_390] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 end
 
@@ -111,8 +111,8 @@ if (TEST_MAXMEL)
     MaxMelDirection.describe.validation = OLValidateDirection(MaxMelDirection,MaxMelBackground,ol,radiometer,...
         'receptors',receptors);
 end
-if (TEST_LIGHTFLUX_540_380)
-    LightFluxDirection_540_380.describe.validation = OLValidateDirection(LightFluxDirection_540_380,LightFluxBackground_540_380,ol,radiometer,...
+if (TEST_LIGHTFLUX_590_390)
+    LightFluxDirection_590_390.describe.validation = OLValidateDirection(LightFluxDirection_590_390,LightFluxBackground_590_390,ol,radiometer,...
         'receptors',receptors);
 end
 
@@ -152,9 +152,9 @@ for dd = 1:length(directions)
     backgroundxyY = XYZToxyY(T_xyz*OLPrimaryToSpd(cal,background.differentialPrimaryValues));
     directionxyY = XYZToxyY(T_xyz*OLPrimaryToSpd(cal,background.differentialPrimaryValues+direction.differentialPrimaryValues));
     fprintf('\n');
-    fprintf('   * <strong>Luminance</strong>: Weber contrast = %0.1f%%\n',100*(directionxyY(3)-backgroundxyY(3))/backgroundxyY(3));
-    fprintf('   * <strong>Background x,y</strong>: %0.3f, %0.3f\n',backgroundxyY(1),backgroundxyY(2));
-    fprintf('   * <strong>Direction at max x,y</strong>: %0.3f, %0.3f\n',directionxyY(1),directionxyY(2));
+    fprintf('   * <strong>Luminance weber contrast </strong>: contrast = %0.1f%%\n',backgroundxyY(1),100*(directionxyY(3)-backgroundxyY(3))/backgroundxyY(3));
+    fprintf('   * <strong>Background x,y, Y</strong>: %0.3f, %0.3f, %0.1 cd/m2\n',backgroundxyY(1),backgroundxyY(2),backgroundxyY(3));
+    fprintf('   * <strong>Direction at max x,y</strong>: %0.3f, %0.3f, %0.1 cd/m2\n',directionxyY(1),directionxyY(2),directionxyY(3));
 
     fprintf('\n\n');
 end

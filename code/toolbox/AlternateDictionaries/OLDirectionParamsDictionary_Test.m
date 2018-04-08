@@ -83,16 +83,16 @@ if OLDirectionParamsValidate(params)
     dictionary(params.name) = params;
 end
 
-%% LightFlux_540_380_50
+%% LightFlux_590_390_50
 % Direction for maximum light flux step
-%   CIE x = .54, y = .38
+%   Chrom x = .59, y = .39
 %   Flux factor = 5
 params = OLDirectionParams_LightFluxChrom;
 params.baseName = 'LightFlux';
-params.lightFluxDesiredXY = [0.54,0.38];
+params.lightFluxDesiredXY = [0.59,0.39];
 params.lightFluxDownFactor = 5;
 params.name = OLDirectionNameFromParams(params);
-params.backgroundName = 'LightFlux_540_380_50';
+params.backgroundName = 'LightFlux_590_390_50';
 if OLDirectionParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
@@ -100,7 +100,7 @@ end
 
 %% LightFlux_330_330_20
 % Direction for maximum light flux step
-%   CIE x = .33, y = .33
+%   Chrom x = .33, y = .33
 %   Flux factor = 2
 params = OLDirectionParams_LightFluxChrom;
 params.baseName = 'LightFlux';

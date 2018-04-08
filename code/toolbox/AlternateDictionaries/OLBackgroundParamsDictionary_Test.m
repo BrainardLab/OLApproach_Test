@@ -86,12 +86,12 @@ if OLBackgroundParamsValidate(params)
     dictionary(params.name) = params;
 end
 
-%% LightFlux_540_380_50
-% Background at xy = [0.54,0.38] that allows light flux pulses to increase
+%% LightFlux_590_390_50
+% Background at xy = [0.59,0.39] that allows light flux pulses to increase
 % a factor of 5 within gamut
 params = OLBackgroundParams_LightFluxChrom;
 params.baseName = 'LightFlux';
-params.lightFluxDesiredXY = [0.54,0.38];
+params.lightFluxDesiredXY = [0.59,0.39];
 params.lightFluxDownFactor = 5;
 params.primaryHeadRoom = 0.1;
 params.name = OLBackgroundNameFromParams(params);
