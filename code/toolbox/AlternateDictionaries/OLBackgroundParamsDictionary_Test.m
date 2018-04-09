@@ -93,7 +93,12 @@ params = OLBackgroundParams_LightFluxChrom;
 params.baseName = 'LightFlux';
 params.lightFluxDesiredXY = [0.59,0.39];
 params.lightFluxDownFactor = 5;
-params.primaryHeadRoom = 0.1;
+params.primaryHeadRoom = 0.005;
+params.lambda = 0;
+params.spdToleranceFraction = 0.005;
+params.optimizationTarget = 'maxContrast';
+params.primaryHeadroomForInitialMax = 0.05;
+params.maxScaleDownForStart = 2;
 params.name = OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
@@ -107,6 +112,12 @@ params = OLBackgroundParams_LightFluxChrom;
 params.baseName = 'LightFlux';
 params.lightFluxDesiredXY = [0.33,0.33];
 params.lightFluxDownFactor = 2;
+params.primaryHeadRoom = 0.005;
+params.lambda = 0;
+params.spdToleranceFraction = 0.005;
+params.optimizationTarget = 'maxLum';
+params.primaryHeadroomForInitialMax = 0.05;
+params.maxScaleDownForStart = 2;
 params.name = OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
     % All validations OK. Add entry to the dictionary.

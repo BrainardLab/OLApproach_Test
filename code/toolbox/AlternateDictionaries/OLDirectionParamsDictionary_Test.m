@@ -89,6 +89,7 @@ end
 %   Flux factor = 5
 params = OLDirectionParams_LightFluxChrom;
 params.baseName = 'LightFlux';
+params.polarType = 'unipolar';
 params.lightFluxDesiredXY = [0.59,0.39];
 params.lightFluxDownFactor = 5;
 params.name = OLDirectionNameFromParams(params);
@@ -104,6 +105,7 @@ end
 %   Flux factor = 2
 params = OLDirectionParams_LightFluxChrom;
 params.baseName = 'LightFlux';
+params.polarType = 'bipolar';
 params.lightFluxDesiredXY = [0.33,0.33];
 params.lightFluxDownFactor = 2;
 params.name = OLDirectionNameFromParams(params);
