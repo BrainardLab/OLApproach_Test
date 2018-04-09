@@ -1,7 +1,7 @@
-function [ LightFluxDirection_330_330] = testGenerateNominalLightFluxBipolarDirections(calibrationType, observerAge)
+function [LightFluxDirection_330_330] = testGenerateNominalLightFluxBipolarDirections(calibrationType, observerAge)
 % Function to compute nominal backgrounds and directions based on
 % calibration type and subject age.  This version is used for developing
-% and testing modulations for MaxMel type experiments.
+% and testing bipolar light flux modulations.
 
 % Input:
 %   - calibrationType: string describing the calibration from which we want
@@ -13,34 +13,22 @@ function [ LightFluxDirection_330_330] = testGenerateNominalLightFluxBipolarDire
 %       nominal directionStructs
 %
 % Output:
-%   - directionStructs (MaxLMS, MaxMel, and LightFlux): our Squint
-%       experiment uses three stimulus types, and the code produces the
-%       nominal directionStruct for each type. The relevant contrast
-%       information is stored within as
-%       directionStruct.describe.validation.predictedContrast and
-%       directionStruct.describe.validation.predictedContrastPostreceptoral.
-%       Note that these have the same values as the
-%       actualContrast/actualContrastPostReceptoral because we're not doing
-%       any direction correction or performing actual validation
-%       measurements
+%   - directionStructs (LightFlux)
+%
 
 % History:
-%   04/01/18  dhb  Starting working on it starting with jv version from
-%                  OLApproach_Squint.
+%   04/09/18  dhb  Light flux bipolar version
 
 % Examples:
 %{
-testGenerateNominalMaxMelishDirections('BoxBRandomizedLongCableAEyePiece1_ND04', 32);
+testGenerateNominalLightFluxBipolarDirections('BoxBRandomizedLongCableAEyePiece1_ND04', 32);
 %}
 %{
-testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04', 57);
+testGenerateNominalLightFluxBipolarDirections('BoxDRandomizedLongCableBEyePiece2_ND01', 32);
 %}
 
 %% Parameters
-%
-% Always test MAXLMS because we use that to get a common set of receptors.
-TEST_MAXMEL = true;
-TEST_LIGHTFLUX_590_390 = true;
+whichXYZ = 'xyzCIEPhys10';
 
 %% Define altnernate dictionary functions.
 backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Test';
@@ -66,62 +54,45 @@ protocolParams.simulate.makePlots = false;
 % Make the oneLight object
 ol = OneLight('simulate',protocolParams.simulate.oneLight,'plotWhenSimulating',protocolParams.simulate.makePlots); drawnow;
 
-%% MaxLMS test
-nDirections = nDirections+1;
-directions{nDirections} = 'MaxLMSDirection';
-
+% Need receptors to validate. Light flux objects don't
+% currently have them, so making a receptor direction object
+% to get them.
 MaxLMSParams = OLDirectionParamsFromName('MaxLMS_unipolar_275_60_667', ...
     'alternateDictionaryFunc', directionAlternateDictionary);
 [MaxLMSDirection, MaxLMSBackground] = OLDirectionNominalFromParams(MaxLMSParams, cal, ...
     'observerAge',protocolParams.observerAgeInYrs, ...
     'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
-
-
-%% MaxMel
-if (TEST_MAXMEL)
-    nDirections = nDirections+1;
-    directions{nDirections} = 'MaxMelDirection';
-    
-    MaxMelParams = OLDirectionParamsFromName('MaxMel_unipolar_275_60_667', ...
-        'alternateDictionaryFunc', directionAlternateDictionary);
-    [MaxMelDirection, MaxMelBackground] = OLDirectionNominalFromParams(MaxMelParams, cal, ...
-        'observerAge',protocolParams.observerAgeInYrs, ...
-        'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
-end
+receptors = MaxLMSDirection.describe.directionParams.T_receptors;
 
 %% Light flux at one chrom
-if (TEST_LIGHTFLUX_590_390)
-    nDirections = nDirections+1;
-    directions{nDirections} = 'LightFluxDirection_590_390';
-    
-    LightFluxParams = OLDirectionParamsFromName('LightFlux_590_390_50', ...
-        'alternateDictionaryFunc', directionAlternateDictionary);
-    [LightFluxDirection_590_390, LightFluxBackground_590_390] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
-        'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
-end
+nDirections = nDirections+1;
+directions{nDirections} = 'LightFluxDirection_330_330';
+
+%% Get base light flux direction and background params
+LightFluxParams = OLDirectionParamsFromName('LightFlux_330_330_20', ...
+    'alternateDictionaryFunc', directionAlternateDictionary);
+LightFluxParams.backgroundParams = OLBackgroundParamsFromName(LightFluxParams.backgroundName,...
+                            'alternateDictionaryFunc',backgroundAlternateDictionary);
+                        
+%% Parameter adjustment
+LightFluxParams.lightFluxDesiredXY = [0.45 0.45];
+LightFluxParams.backgroundParams.lightFluxDesiredXY = LightFluxParams.lightFluxDesiredXY;
+
+%% Generate
+[LightFluxDirection_330_330, LightFluxBackground_330_330] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
+    'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 
 %% Simulate validation to easily determine the contrast in our nominal OLDirections
 %
 % Assuming that all directions use same receptors as MaxLMS.  OK for
 % testing here.
-receptors = MaxLMSDirection.describe.directionParams.T_receptors;
 receptorStrings = MaxLMSDirection.describe.directionParams.photoreceptorClasses;
-MaxLMSDirection.describe.validation = OLValidateDirection(MaxLMSDirection,MaxLMSBackground,ol,radiometer,...
+LightFluxDirection_330_330.describe.validation = OLValidateDirection(LightFluxDirection_330_330,LightFluxBackground_330_330,ol,radiometer,...
     'receptors',receptors);
-if (TEST_MAXMEL)
-    MaxMelDirection.describe.validation = OLValidateDirection(MaxMelDirection,MaxMelBackground,ol,radiometer,...
-        'receptors',receptors);
-end
-if (TEST_LIGHTFLUX_590_390)
-    LightFluxDirection_590_390.describe.validation = OLValidateDirection(LightFluxDirection_590_390,LightFluxBackground_590_390,ol,radiometer,...
-        'receptors',receptors);
-end
 
 %% Load XYZ functions according to chosen type
-whichXYZ = 'xyzCIEPhys10';
 eval(['tempXYZ = load(''T_' whichXYZ ''');']);
 eval(['T_xyz = SplineCmf(tempXYZ.S_' whichXYZ ',683*tempXYZ.T_' whichXYZ ',cal.describe.S);']);
-
 
 %% Report on nominal contrasts
 postreceptoralStrings = {'L+M+S', 'L-M', 'S-(L+M)'};
@@ -156,6 +127,6 @@ for dd = 1:length(directions)
     fprintf('   * <strong>Luminance weber contrast </strong>: %0.1f%%\n',100*(directionxyY(3)-backgroundxyY(3))/backgroundxyY(3));
     fprintf('   * <strong>Background x, y, Y</strong>: %0.3f, %0.3f, %0.1f cd/m2\n',backgroundxyY(1),backgroundxyY(2),backgroundxyY(3));
     fprintf('   * <strong>Direction at max x, y, Y</strong>: %0.3f, %0.3f, %0.1f cd/m2\n',directionxyY(1),directionxyY(2),directionxyY(3));
-
+    
     fprintf('\n\n');
 end
