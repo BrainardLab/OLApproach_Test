@@ -1,4 +1,4 @@
-function [MaxLMSDirection, MaxMelDirection, LightFluxDirection_590_390] = testGenerateNominalMaxMelishDirections(calibrationType, observerAge)
+function [ LightFluxDirection_330_330] = testGenerateNominalLightFluxBipolarDirections(calibrationType, observerAge)
 % Function to compute nominal backgrounds and directions based on
 % calibration type and subject age.  This version is used for developing
 % and testing modulations for MaxMel type experiments.
