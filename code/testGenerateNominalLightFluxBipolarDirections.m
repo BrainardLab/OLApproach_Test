@@ -76,6 +76,7 @@ LightFluxParams.backgroundParams = OLBackgroundParamsFromName(LightFluxParams.ba
                         
 %% Parameter adjustment
 LightFluxParams.lightFluxDesiredXY = [0.45 0.45];
+LightFluxParams.lightFluxDownFactor = 1.8;
 LightFluxParams.backgroundParams.lightFluxDesiredXY = LightFluxParams.lightFluxDesiredXY;
 
 %% Generate
@@ -106,7 +107,7 @@ for dd = 1:length(directions)
     % Grab the relevant contrast information from the OLDirection
     receptorContrasts = direction.ToDesiredReceptorContrast(background,receptors);
     %receptorContrasts = direction.describe.validation.contrastDesired;
-    postreceptoralContrasts = direction.describe.validation.postreceptoralContrastDesired;
+    %postreceptoralContrasts = direction.describe.validation.postreceptoralContrastDesired;
     
     % Report of receptoral contrast
     for j = 1:size(receptors,1)
@@ -114,15 +115,15 @@ for dd = 1:length(directions)
     end
     
     % Report on postreceptoral contrast
-    NCombinations = size(postreceptoralContrasts, 1);
-    fprintf('\n');
-    for ii = 1:NCombinations
-        fprintf('   * <strong>%s</strong>: contrast = %0.1f%%\n',postreceptoralStrings{ii},100*postreceptoralContrasts(ii));
-    end
+    % NCombinations = size(postreceptoralContrasts, 1);
+    % fprintf('\n');
+    % for ii = 1:NCombinations
+    %     fprintf('   * <strong>%s</strong>: contrast = %0.1f%%\n',postreceptoralStrings{ii},100*postreceptoralContrasts(ii));
+    % end
     
     % Chromaticity and luminance
     backgroundxyY = XYZToxyY(T_xyz*OLPrimaryToSpd(cal,background.differentialPrimaryValues));
-    directionxyY = XYZToxyY(T_xyz*OLPrimaryToSpd(cal,background.differentialPrimaryValues+direction.differentialPrimaryValues));
+    directionxyY = XYZToxyY(T_xyz*OLPrimaryToSpd(cal,background.differentialPrimaryValues+direction.differentialPositive));
     fprintf('\n');
     fprintf('   * <strong>Luminance weber contrast </strong>: %0.1f%%\n',100*(directionxyY(3)-backgroundxyY(3))/backgroundxyY(3));
     fprintf('   * <strong>Background x, y, Y</strong>: %0.3f, %0.3f, %0.1f cd/m2\n',backgroundxyY(1),backgroundxyY(2),backgroundxyY(3));

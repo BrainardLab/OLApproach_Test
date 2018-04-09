@@ -91,6 +91,7 @@ end
 % a factor of 5 within gamut
 params = OLBackgroundParams_LightFluxChrom;
 params.baseName = 'LightFlux';
+params.polarType = 'unipolar';
 params.lightFluxDesiredXY = [0.59,0.39];
 params.lightFluxDownFactor = 5;
 params.primaryHeadRoom = 0.005;
@@ -110,6 +111,7 @@ end
 % a factor of  2 within gamut
 params = OLBackgroundParams_LightFluxChrom;
 params.baseName = 'LightFlux';
+params.polarType = 'bipolar';
 params.lightFluxDesiredXY = [0.33,0.33];
 params.lightFluxDownFactor = 2;
 params.primaryHeadRoom = 0.005;
