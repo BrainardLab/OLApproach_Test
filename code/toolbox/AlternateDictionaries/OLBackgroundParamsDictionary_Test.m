@@ -116,7 +116,7 @@ if OLBackgroundParamsValidate(params)
     dictionary(params.name) = params;
 end
 
-%% LightFlux_330_330_20
+%% LightFlux_BipolarBase
 %
 % Base params for bipolar light flux modulation backgrounds
 params = OLBackgroundParams_LightFluxChrom;

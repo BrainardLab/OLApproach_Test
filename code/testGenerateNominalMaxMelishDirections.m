@@ -115,6 +115,20 @@ if (TEST_LIGHTFLUX)
     LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
     LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
     LightFluxParams.backgroundParams.desiredMaxContrast = 4;
+    
+    params.search.primaryHeadRoom = 0.005;
+    params.search.primaryTolerance = 1e-6;
+    params.search.checkPrimaryOutOfRange = true;
+    params.search.initialLuminanceFactor = 0.2;
+    params.search.lambda = 0;
+    params.search.spdToleranceFraction = 0.005;
+    params.search.chromaticityTolerance = 0.0001;
+    params.search.optimizationTarget = 'maxContrast';
+    params.search.primaryHeadroomForInitialMax = 0.005;
+    params.search.maxScaleDownForStart = 2;
+    params.search.maxSearchIter = 2000;
+    params.search.verbose = true;
+
 
     [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
