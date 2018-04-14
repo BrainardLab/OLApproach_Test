@@ -41,6 +41,15 @@ protocolParams.calibrationType = calibrationType;
 cal = OLGetCalibrationStructure('CalibrationType',protocolParams.calibrationType,'CalibrationDate','latest');
 nDirections = 0;
 
+%% Load cmfs
+eval(['tempXYZ = load(''T_' whichXYZ ''');']);
+eval(['T_xyz = SplineCmf(tempXYZ.S_' whichXYZ ',683*tempXYZ.T_' whichXYZ ',cal.describe.S);']);
+
+%% Get native chromaticity for this cal
+nativeXYZ = T_xyz*OLPrimaryToSpd(cal,0.5*ones(size(cal.computed.pr650M,2),1));
+nativexyY = XYZToxyY(nativeXYZ);
+nativexy = nativexyY(1:2);
+
 % Set up some information about our theoretical observer
 protocolParams.observerID = '';
 protocolParams.observerAgeInYrs = observerAge;
@@ -66,21 +75,23 @@ receptors = MaxLMSDirection.describe.directionParams.T_receptors;
 
 %% Light flux at one chrom
 nDirections = nDirections+1;
-directions{nDirections} = 'LightFluxDirection_330_330';
+directions{nDirections} = 'LightFluxDirection';
 
 %% Get base light flux direction and background params
-LightFluxParams = OLDirectionParamsFromName('LightFlux_330_330_20', ...
+LightFluxParams = OLDirectionParamsFromName('LightFlux_BipolarBase', ...
     'alternateDictionaryFunc', directionAlternateDictionary);
 LightFluxParams.backgroundParams = OLBackgroundParamsFromName(LightFluxParams.backgroundName,...
                             'alternateDictionaryFunc',backgroundAlternateDictionary);
                         
 %% Parameter adjustment
-LightFluxParams.lightFluxDesiredXY = [0.45 0.45];
-LightFluxParams.lightFluxDownFactor = 1.8;
-LightFluxParams.backgroundParams.lightFluxDesiredXY = LightFluxParams.lightFluxDesiredXY;
+LightFluxParams.desiredxy = nativexy;
+LightFluxParams.whichXYZ = whichXYZ;
+LightFluxParams.desiredMaxContrast = 0.8;
+LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
+LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
 
 %% Generate
-[LightFluxDirection_330_330, LightFluxBackground_330_330] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
+[LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
     'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 
 %% Simulate validation to easily determine the contrast in our nominal OLDirections
@@ -88,12 +99,10 @@ LightFluxParams.backgroundParams.lightFluxDesiredXY = LightFluxParams.lightFluxD
 % Assuming that all directions use same receptors as MaxLMS.  OK for
 % testing here.
 receptorStrings = MaxLMSDirection.describe.directionParams.photoreceptorClasses;
-LightFluxDirection_330_330.describe.validation = OLValidateDirection(LightFluxDirection_330_330,LightFluxBackground_330_330,ol,radiometer,...
+LightFluxDirection.describe.validation = OLValidateDirection(LightFluxDirection,LightFluxBackground,ol,radiometer,...
     'receptors',receptors);
 
 %% Load XYZ functions according to chosen type
-eval(['tempXYZ = load(''T_' whichXYZ ''');']);
-eval(['T_xyz = SplineCmf(tempXYZ.S_' whichXYZ ',683*tempXYZ.T_' whichXYZ ',cal.describe.S);']);
 
 %% Report on nominal contrasts
 postreceptoralStrings = {'L+M+S', 'L-M', 'S-(L+M)'};

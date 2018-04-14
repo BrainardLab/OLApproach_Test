@@ -86,44 +86,65 @@ if OLBackgroundParamsValidate(params)
     dictionary(params.name) = params;
 end
 
-%% LightFlux_590_390_50
-% Background at xy = [0.59,0.39] that allows light flux pulses to increase
-% a factor of 5 within gamut
+%% LightFlux_UnipolarBase
+%
+% Base params for unipolar light flux modulation backgrounds
 params = OLBackgroundParams_LightFluxChrom;
 params.baseName = 'LightFlux';
 params.polarType = 'unipolar';
-params.lightFluxDesiredXY = [0.59,0.39];
-params.lightFluxDownFactor = 5;
-params.primaryHeadRoom = 0.005;
-params.lambda = 0;
-params.spdToleranceFraction = 0.005;
-params.optimizationTarget = 'maxContrast';
-params.primaryHeadroomForInitialMax = 0.05;
-params.maxScaleDownForStart = 2;
-params.name = OLBackgroundNameFromParams(params);
+params.desiredxy = [0.59,0.39];
+params.whichXYZ = 'xyzCIEPhys10';
+params.desiredMaxContrast = 4;
+
+% These are the options that go to OLPrimaryInvSolveChrom
+params.search.primaryHeadRoom = 0.005;
+params.search.primaryTolerance = 1e-6;
+params.search.checkPrimaryOutOfRange = true;
+params.search.initialLuminanceFactor = 0.2;
+params.search.lambda = 0;
+params.search.spdToleranceFraction = 0.005;
+params.search.chromaticityTolerance = 0.0001;
+params.search.optimizationTarget = 'maxLum';
+params.search.primaryHeadroomForInitialMax = 0.005;
+params.search.maxScaleDownForStart = 2;
+params.search.maxSearchIter = 300;
+params.search.verbose = false;
+
+params.name = 'LightFlux_UnipolarBase';
 if OLBackgroundParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
 end
 
 %% LightFlux_330_330_20
-% Background at xy = [0.33,0.33] that allows light flux pulses to increase 
-% a factor of  2 within gamut
+%
+% Base params for bipolar light flux modulation backgrounds
 params = OLBackgroundParams_LightFluxChrom;
 params.baseName = 'LightFlux';
 params.polarType = 'bipolar';
-params.lightFluxDesiredXY = [0.33,0.33];
-params.lightFluxDownFactor = 2;
-params.primaryHeadRoom = 0.005;
-params.lambda = 0;
-params.spdToleranceFraction = 0.005;
-params.optimizationTarget = 'maxLum';
-params.primaryHeadroomForInitialMax = 0.05;
-params.maxScaleDownForStart = 2;
-params.name = OLBackgroundNameFromParams(params);
+params.desiredxy = [0.33,0.33];
+params.whichXYZ = 'xyzCIEPhys10';
+params.desiredMaxContrast = 0.8;
+
+% These are the options that go to OLPrimaryInvSolveChrom
+params.search.primaryHeadRoom = 0.005;
+params.search.primaryTolerance = 1e-6;
+params.search.checkPrimaryOutOfRange = true;
+params.search.initialLuminanceFactor = 0.2;
+params.search.lambda = 0;
+params.search.spdToleranceFraction = 0.005;
+params.search.chromaticityTolerance = 0.0001;
+params.search.optimizationTarget = 'maxLum';
+params.search.primaryHeadroomForInitialMax = 0.005;
+params.search.maxScaleDownForStart = 2;
+params.search.maxSearchIter = 300;
+params.search.verbose = true;
+
+params.name = 'LightFlux_BipolarBase';
 if OLBackgroundParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
 end
+
 
 end

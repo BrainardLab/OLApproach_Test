@@ -83,33 +83,33 @@ if OLDirectionParamsValidate(params)
     dictionary(params.name) = params;
 end
 
-%% LightFlux_590_390_50
-% Direction for maximum light flux step
-%   Chrom x = .59, y = .39
-%   Flux factor = 5
+%% LightFlux_UnipolarBase
+%
+% Base params for unipolar light flux directions
 params = OLDirectionParams_LightFluxChrom;
 params.baseName = 'LightFlux';
 params.polarType = 'unipolar';
-params.lightFluxDesiredXY = [0.59,0.39];
-params.lightFluxDownFactor = 5;
-params.name = OLDirectionNameFromParams(params);
-params.backgroundName = 'LightFlux_590_390_50';
+params.desiredxy = [0.59,0.39];
+params.whichXYZ = 'xyzCIEPhys10';
+params.desiredMaxContrast = 4;
+params.name = 'LightFlux_UnipolarBase';
+params.backgroundName = 'LightFlux_UnipolarBase';
 if OLDirectionParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
 end
 
-%% LightFlux_330_330_20
-% Direction for maximum light flux step
-%   Chrom x = .33, y = .33
-%   Flux factor = 2
+%% LightFlux_BipolarBase
+%
+% Base params for light flux bipolar directions
 params = OLDirectionParams_LightFluxChrom;
 params.baseName = 'LightFlux';
 params.polarType = 'bipolar';
-params.lightFluxDesiredXY = [0.33,0.33];
-params.lightFluxDownFactor = 2;
-params.name = OLDirectionNameFromParams(params);
-params.backgroundName = 'LightFlux_330_330_20';
+params.desiredxy = [0.33,0.33];
+params.whichXYZ = 'xyzCIEPhys10';
+params.desiredMaxContrast = 0.8;
+params.name = 'LightFlux_BipolarBase';
+params.backgroundName = 'LightFlux_BipolarBase';
 if OLDirectionParamsValidate(params)
     % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
