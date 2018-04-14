@@ -126,12 +126,13 @@ if (TEST_LIGHTFLUX)
     params.search.optimizationTarget = 'maxContrast';
     params.search.primaryHeadroomForInitialMax = 0.005;
     params.search.maxScaleDownForStart = 2;
-    params.search.maxSearchIter = 2000;
+    params.search.maxSearchIter = 3000;
     params.search.verbose = true;
 
-
+    tic
     [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
+    toc
 end
 
 %% Simulate validation to easily determine the contrast in our nominal OLDirections
