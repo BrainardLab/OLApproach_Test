@@ -1,4 +1,4 @@
-function [MaxLMSDirection, MaxMelDirection, LightFluxDirection_590_390] = testGenerateNominalMaxMelishDirections(calibrationType, observerAge)
+function [MaxLMSDirection, MaxMelDirection, LightFluxDirection] = testGenerateNominalMaxMelishDirections(calibrationType, observerAge)
 % Function to compute nominal backgrounds and directions based on
 % calibration type and subject age.  This version is used for developing
 % and testing modulations for MaxMel type experiments.
@@ -39,8 +39,11 @@ testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04
 %% Parameters
 %
 % Always test MAXLMS because we use that to get a common set of receptors.
-TEST_MAXMEL = true;
-TEST_LIGHTFLUX_590_390 = true;
+TEST_MAXMEL = false;
+TEST_LIGHTFLUX = true;
+
+% Which cmfs to use
+whichXYZ = 'xyzCIEPhys10';
 
 %% Define altnernate dictionary functions.
 backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Test';
@@ -53,10 +56,16 @@ protocolParams.calibrationType = calibrationType;
 cal = OLGetCalibrationStructure('CalibrationType',protocolParams.calibrationType,'CalibrationDate','latest');
 nDirections = 0;
 
-% Set up some information about our theoretical observer
+%% Load XYZ cmfs
+whichXYZ = 'xyzCIEPhys10';
+eval(['tempXYZ = load(''T_' whichXYZ ''');']);
+eval(['T_xyz = SplineCmf(tempXYZ.S_' whichXYZ ',683*tempXYZ.T_' whichXYZ ',cal.describe.S);']);
+
+%% Set up some information about our theoretical observer
 protocolParams.observerID = '';
 protocolParams.observerAgeInYrs = observerAge;
 
+%% Set up simulations
 % To make these nominal OLDirections we'll need to simulate the
 % OneLight and the radiometer. Set that up here
 radiometer = [];
@@ -90,13 +99,24 @@ if (TEST_MAXMEL)
 end
 
 %% Light flux at one chrom
-if (TEST_LIGHTFLUX_590_390)
+if (TEST_LIGHTFLUX)
     nDirections = nDirections+1;
-    directions{nDirections} = 'LightFluxDirection_590_390';
+    directions{nDirections} = 'LightFluxDirection';
     
-    LightFluxParams = OLDirectionParamsFromName('LightFlux_590_390_50', ...
+    LightFluxParams = OLDirectionParamsFromName('LightFlux_UnipolarBase', ...
         'alternateDictionaryFunc', directionAlternateDictionary);
-    [LightFluxDirection_590_390, LightFluxBackground_590_390] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
+    LightFluxParams.backgroundParams = OLBackgroundParamsFromName(LightFluxParams.backgroundName,...
+                            'alternateDictionaryFunc',backgroundAlternateDictionary);
+                        
+    % Parameter adjustment
+    LightFluxParams.desiredxy = [0.54,0.38];
+    LightFluxParams.whichXYZ = whichXYZ;
+    LightFluxParams.desiredMaxContrast = 4;
+    LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
+    LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
+    LightFluxParams.backgroundParams.desiredMaxContrast = 4;
+
+    [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 end
 
@@ -112,16 +132,10 @@ if (TEST_MAXMEL)
     MaxMelDirection.describe.validation = OLValidateDirection(MaxMelDirection,MaxMelBackground,ol,radiometer,...
         'receptors',receptors);
 end
-if (TEST_LIGHTFLUX_590_390)
-    LightFluxDirection_590_390.describe.validation = OLValidateDirection(LightFluxDirection_590_390,LightFluxBackground_590_390,ol,radiometer,...
+if (TEST_LIGHTFLUX)
+    LightFluxDirection.describe.validation = OLValidateDirection(LightFluxDirection,LightFluxBackground,ol,radiometer,...
         'receptors',receptors);
 end
-
-%% Load XYZ functions according to chosen type
-whichXYZ = 'xyzCIEPhys10';
-eval(['tempXYZ = load(''T_' whichXYZ ''');']);
-eval(['T_xyz = SplineCmf(tempXYZ.S_' whichXYZ ',683*tempXYZ.T_' whichXYZ ',cal.describe.S);']);
-
 
 %% Report on nominal contrasts
 postreceptoralStrings = {'L+M+S', 'L-M', 'S-(L+M)'};

@@ -50,10 +50,12 @@ nativeXYZ = T_xyz*OLPrimaryToSpd(cal,0.5*ones(size(cal.computed.pr650M,2),1));
 nativexyY = XYZToxyY(nativeXYZ);
 nativexy = nativexyY(1:2);
 
-% Set up some information about our theoretical observer
+%% Set up some information about our theoretical observer
 protocolParams.observerID = '';
 protocolParams.observerAgeInYrs = observerAge;
 
+%% Set up simulations
+%
 % To make these nominal OLDirections we'll need to simulate the
 % OneLight and the radiometer. Set that up here
 radiometer = [];
