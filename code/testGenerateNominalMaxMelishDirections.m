@@ -109,7 +109,7 @@ if (TEST_LIGHTFLUX)
                             'alternateDictionaryFunc',backgroundAlternateDictionary);
                         
     % Parameter adjustment
-    LightFluxParams.desiredxy = [0.59,0.39];
+    LightFluxParams.desiredxy = [0.595,0.388];
     LightFluxParams.whichXYZ = whichXYZ;
     LightFluxParams.desiredMaxContrast = 4;
     LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
@@ -122,7 +122,7 @@ if (TEST_LIGHTFLUX)
     LightFluxParams.backgroundParams.search.initialLuminanceFactor = 0.2;
     LightFluxParams.backgroundParams.search.lambda = 0;
     LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.005;
-    LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.0001;
+    LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.005;
     LightFluxParams.backgroundParams.search.optimizationTarget = 'maxContrast';
     LightFluxParams.backgroundParams.search.primaryHeadroomForInitialMax = 0.000;
     LightFluxParams.backgroundParams.search.maxScaleDownForStart = 2;
