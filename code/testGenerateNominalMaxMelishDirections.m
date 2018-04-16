@@ -39,7 +39,7 @@ testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04
 %% Parameters
 %
 % Always test MAXLMS because we use that to get a common set of receptors.
-TEST_MAXMEL = false;
+TEST_MAXMEL = true;
 TEST_LIGHTFLUX = true;
 
 % Which cmfs to use
@@ -109,25 +109,25 @@ if (TEST_LIGHTFLUX)
                             'alternateDictionaryFunc',backgroundAlternateDictionary);
                         
     % Parameter adjustment
-    LightFluxParams.desiredxy = [0.54,0.38];
+    LightFluxParams.desiredxy = [0.59,0.39];
     LightFluxParams.whichXYZ = whichXYZ;
     LightFluxParams.desiredMaxContrast = 4;
     LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
     LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
     LightFluxParams.backgroundParams.desiredMaxContrast = 4;
     
-    params.search.primaryHeadRoom = 0.005;
-    params.search.primaryTolerance = 1e-6;
-    params.search.checkPrimaryOutOfRange = true;
-    params.search.initialLuminanceFactor = 0.2;
-    params.search.lambda = 0;
-    params.search.spdToleranceFraction = 0.005;
-    params.search.chromaticityTolerance = 0.0001;
-    params.search.optimizationTarget = 'maxContrast';
-    params.search.primaryHeadroomForInitialMax = 0.005;
-    params.search.maxScaleDownForStart = 2;
-    params.search.maxSearchIter = 3000;
-    params.search.verbose = true;
+    LightFluxParams.backgroundParams.search.primaryHeadRoom = 0.000;
+    LightFluxParams.backgroundParams.search.primaryTolerance = 1e-6;
+    LightFluxParams.backgroundParams.search.checkPrimaryOutOfRange = true;
+    LightFluxParams.backgroundParams.search.initialLuminanceFactor = 0.2;
+    LightFluxParams.backgroundParams.search.lambda = 0;
+    LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.005;
+    LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.0001;
+    LightFluxParams.backgroundParams.search.optimizationTarget = 'maxContrast';
+    LightFluxParams.backgroundParams.search.primaryHeadroomForInitialMax = 0.000;
+    LightFluxParams.backgroundParams.search.maxScaleDownForStart = 2;
+    LightFluxParams.backgroundParams.search.maxSearchIter = 3000;
+    LightFluxParams.backgroundParams.search.verbose = true;
 
     tic
     [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
