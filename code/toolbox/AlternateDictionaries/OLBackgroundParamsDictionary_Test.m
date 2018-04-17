@@ -97,11 +97,12 @@ params.whichXYZ = 'xyzCIEPhys10';
 params.desiredMaxContrast = 4;
 
 % These are the options that go to OLPrimaryInvSolveChrom
-params.search.primaryHeadRoom = 0.005;
+params.search.primaryHeadroom = 0.005;
 params.search.primaryTolerance = 1e-6;
 params.search.checkPrimaryOutOfRange = true;
 params.search.initialLuminanceFactor = 0.2;
 params.search.lambda = 0;
+params.search.whichSpdToPrimaryMin = 'leastSquares';
 params.search.spdToleranceFraction = 0.005;
 params.search.chromaticityTolerance = 0.0001;
 params.search.optimizationTarget = 'maxLum';
@@ -132,6 +133,7 @@ params.search.primaryTolerance = 1e-6;
 params.search.checkPrimaryOutOfRange = true;
 params.search.initialLuminanceFactor = 0.2;
 params.search.lambda = 0;
+params.search.whichSpdToPrimaryMin = 'leastSquares';
 params.search.spdToleranceFraction = 0.005;
 params.search.chromaticityTolerance = 0.0001;
 params.search.optimizationTarget = 'maxLum';

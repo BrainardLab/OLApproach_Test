@@ -39,7 +39,7 @@ testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04
 %% Parameters
 %
 % Always test MAXLMS because we use that to get a common set of receptors.
-TEST_MAXMEL = true;
+TEST_MAXMEL = false;
 TEST_LIGHTFLUX = true;
 
 % Which cmfs to use
@@ -116,14 +116,16 @@ if (TEST_LIGHTFLUX)
     LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
     LightFluxParams.backgroundParams.desiredMaxContrast = 4;
     
-    LightFluxParams.backgroundParams.search.primaryHeadRoom = 0.000;
+    LightFluxParams.backgroundParams.search.primaryHeadroom = 0.000;
     LightFluxParams.backgroundParams.search.primaryTolerance = 1e-6;
     LightFluxParams.backgroundParams.search.checkPrimaryOutOfRange = true;
     LightFluxParams.backgroundParams.search.initialLuminanceFactor = 0.2;
     LightFluxParams.backgroundParams.search.lambda = 0;
-    LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.005;
-    LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.005;
+    LightFluxParams.backgroundParams.search.whichSpdToPrimaryMin = 'fractionalError';
+    LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.003;
+    LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.001;
     LightFluxParams.backgroundParams.search.optimizationTarget = 'maxContrast';
+    LightFluxParams.backgroundParams.search.targetContrast = 4;
     LightFluxParams.backgroundParams.search.primaryHeadroomForInitialMax = 0.000;
     LightFluxParams.backgroundParams.search.maxScaleDownForStart = 2;
     LightFluxParams.backgroundParams.search.maxSearchIter = 3000;
