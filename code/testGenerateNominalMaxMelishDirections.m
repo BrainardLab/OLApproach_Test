@@ -109,21 +109,45 @@ if (TEST_LIGHTFLUX)
                             'alternateDictionaryFunc',backgroundAlternateDictionary);
                         
     % Parameter adjustment
-    LightFluxParams.desiredxy = [0.595,0.388];
+    
+    % These parameters are pretty good for the BoxB long cable calibration.
+    % LightFluxParams.desiredxy = [0.595,0.388];
+    % LightFluxParams.whichXYZ = whichXYZ;
+    % LightFluxParams.desiredMaxContrast = 4;
+    % LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
+    % LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
+    % LightFluxParams.backgroundParams.desiredMaxContrast = 4;
+    % 
+    % LightFluxParams.backgroundParams.search.primaryHeadroom = 0.000;
+    % LightFluxParams.backgroundParams.search.primaryTolerance = 1e-6;
+    % LightFluxParams.backgroundParams.search.checkPrimaryOutOfRange = true;
+    % LightFluxParams.backgroundParams.search.initialLuminanceFactor = 0.2;
+    % LightFluxParams.backgroundParams.search.lambda = 0;
+    % LightFluxParams.backgroundParams.search.whichSpdToPrimaryMin = 'fractionalError';
+    % LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.0045;
+    % LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.08;
+    % LightFluxParams.backgroundParams.search.optimizationTarget = 'maxContrast';
+    % LightFluxParams.backgroundParams.search.targetContrast = 4;
+    % LightFluxParams.backgroundParams.search.primaryHeadroomForInitialMax = 0.000;
+    % LightFluxParams.backgroundParams.search.maxScaleDownForStart = 2;
+    % LightFluxParams.backgroundParams.search.maxSearchIter = 3000;
+    % LightFluxParams.backgroundParams.search.verbose = true;
+    
+    LightFluxParams.desiredxy = [0.608 0.368];
     LightFluxParams.whichXYZ = whichXYZ;
     LightFluxParams.desiredMaxContrast = 4;
     LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
     LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
     LightFluxParams.backgroundParams.desiredMaxContrast = 4;
-    
+
     LightFluxParams.backgroundParams.search.primaryHeadroom = 0.000;
     LightFluxParams.backgroundParams.search.primaryTolerance = 1e-6;
     LightFluxParams.backgroundParams.search.checkPrimaryOutOfRange = true;
     LightFluxParams.backgroundParams.search.initialLuminanceFactor = 0.2;
     LightFluxParams.backgroundParams.search.lambda = 0;
     LightFluxParams.backgroundParams.search.whichSpdToPrimaryMin = 'fractionalError';
-    LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.003;
-    LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.001;
+    LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.01;
+    LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.3;
     LightFluxParams.backgroundParams.search.optimizationTarget = 'maxContrast';
     LightFluxParams.backgroundParams.search.targetContrast = 4;
     LightFluxParams.backgroundParams.search.primaryHeadroomForInitialMax = 0.000;
@@ -131,10 +155,8 @@ if (TEST_LIGHTFLUX)
     LightFluxParams.backgroundParams.search.maxSearchIter = 3000;
     LightFluxParams.backgroundParams.search.verbose = true;
 
-    tic
     [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
-    toc
 end
 
 %% Simulate validation to easily determine the contrast in our nominal OLDirections
