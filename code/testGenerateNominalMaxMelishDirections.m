@@ -33,13 +33,19 @@ function [MaxLMSDirection, MaxMelDirection, LightFluxDirection] = testGenerateNo
 testGenerateNominalMaxMelishDirections('BoxBRandomizedLongCableAEyePiece1_ND04', 32);
 %}
 %{
-testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04', 57);
+testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04', 32);
 %}
+%{
+testGenerateNominalMaxMelishDirections('BoxDLiquidShortCableCEyePiece2_ND01', 32);
+%}
+
+%% Close figures hanging around
+close all;
 
 %% Parameters
 %
 % Always test MAXLMS because we use that to get a common set of receptors.
-TEST_MAXMEL = false;
+TEST_MAXMEL = true;
 TEST_LIGHTFLUX = true;
 
 % Which cmfs to use
@@ -57,7 +63,6 @@ cal = OLGetCalibrationStructure('CalibrationType',protocolParams.calibrationType
 nDirections = 0;
 
 %% Load XYZ cmfs
-whichXYZ = 'xyzCIEPhys10';
 eval(['tempXYZ = load(''T_' whichXYZ ''');']);
 eval(['T_xyz = SplineCmf(tempXYZ.S_' whichXYZ ',683*tempXYZ.T_' whichXYZ ',cal.describe.S);']);
 
@@ -105,8 +110,6 @@ if (TEST_LIGHTFLUX)
     
     LightFluxParams = OLDirectionParamsFromName('LightFlux_UnipolarBase', ...
         'alternateDictionaryFunc', directionAlternateDictionary);
-    LightFluxParams.backgroundParams = OLBackgroundParamsFromName(LightFluxParams.backgroundName,...
-                            'alternateDictionaryFunc',backgroundAlternateDictionary);
                         
     % Parameter adjustment
     
@@ -116,44 +119,37 @@ if (TEST_LIGHTFLUX)
     % LightFluxParams.desiredMaxContrast = 4;
     % LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
     % LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
-    % LightFluxParams.backgroundParams.desiredMaxContrast = 4;
+    % LightFluxParams.backgroundParams.desiredMaxContrast = LightFluxParams.desiredMaxContrast;
     % 
     % LightFluxParams.backgroundParams.search.primaryHeadroom = 0.000;
     % LightFluxParams.backgroundParams.search.primaryTolerance = 1e-6;
     % LightFluxParams.backgroundParams.search.checkPrimaryOutOfRange = true;
     % LightFluxParams.backgroundParams.search.initialLuminanceFactor = 0.2;
     % LightFluxParams.backgroundParams.search.lambda = 0;
-    % LightFluxParams.backgroundParams.search.whichSpdToPrimaryMin = 'fractionalError';
-    % LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.0045;
-    % LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.08;
+    % LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.0025;
+    % LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.01;
     % LightFluxParams.backgroundParams.search.optimizationTarget = 'maxContrast';
     % LightFluxParams.backgroundParams.search.targetContrast = 4;
     % LightFluxParams.backgroundParams.search.primaryHeadroomForInitialMax = 0.000;
-    % LightFluxParams.backgroundParams.search.maxScaleDownForStart = 2;
     % LightFluxParams.backgroundParams.search.maxSearchIter = 3000;
     % LightFluxParams.backgroundParams.search.verbose = true;
     
-    LightFluxParams.desiredxy = [0.608 0.368];
+    LightFluxParams.desiredxy = [0.60 0.38];
     LightFluxParams.whichXYZ = whichXYZ;
     LightFluxParams.desiredMaxContrast = 4;
-    LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
-    LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
-    LightFluxParams.backgroundParams.desiredMaxContrast = 4;
+    LightFluxParams.desiredBackgroundLuminance = 360;
 
-    LightFluxParams.backgroundParams.search.primaryHeadroom = 0.000;
-    LightFluxParams.backgroundParams.search.primaryTolerance = 1e-6;
-    LightFluxParams.backgroundParams.search.checkPrimaryOutOfRange = true;
-    LightFluxParams.backgroundParams.search.initialLuminanceFactor = 0.2;
-    LightFluxParams.backgroundParams.search.lambda = 0;
-    LightFluxParams.backgroundParams.search.whichSpdToPrimaryMin = 'leastSquares' %'fractionalError';
-    LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.01;
-    LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.3;
-    LightFluxParams.backgroundParams.search.optimizationTarget = 'maxContrast';
-    LightFluxParams.backgroundParams.search.targetContrast = 4;
-    LightFluxParams.backgroundParams.search.primaryHeadroomForInitialMax = 0.000;
-    LightFluxParams.backgroundParams.search.maxScaleDownForStart = 2;
-    LightFluxParams.backgroundParams.search.maxSearchIter = 3000;
-    LightFluxParams.backgroundParams.search.verbose = true;
+    LightFluxParams.search.primaryHeadroom = 0.000;
+    LightFluxParams.search.primaryTolerance = 1e-6;
+    LightFluxParams.search.checkPrimaryOutOfRange = true;
+    LightFluxParams.search.initialLuminanceFactor = 0.2;
+    LightFluxParams.search.lambda = 0;
+    LightFluxParams.search.spdToleranceFraction = 30e-5;
+    LightFluxParams.search.chromaticityTolerance = 0.02;
+    LightFluxParams.search.optimizationTarget = 'maxContrast';
+    LightFluxParams.search.primaryHeadroomForInitialMax = 0.000;
+    LightFluxParams.search.maxSearchIter = 3000;
+    LightFluxParams.search.verbose = true;
 
     [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
