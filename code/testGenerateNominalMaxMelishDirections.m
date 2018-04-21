@@ -114,6 +114,7 @@ if (TEST_LIGHTFLUX)
     % Parameter adjustment
     
     % These parameters are pretty good for the BoxB long cable calibration.
+    %
     % LightFluxParams.desiredxy = [0.595,0.388];
     % LightFluxParams.whichXYZ = whichXYZ;
     % LightFluxParams.desiredMaxContrast = 4;
@@ -134,11 +135,30 @@ if (TEST_LIGHTFLUX)
     % LightFluxParams.backgroundParams.search.maxSearchIter = 3000;
     % LightFluxParams.backgroundParams.search.verbose = true;
     
-    LightFluxParams.desiredxy = [0.60 0.38];
+    % These are pretty good for Box D short cable.  A bit of S cone
+    % splatter, but reasonable chrom and lum agreement.
+    % LightFluxParams.desiredxy = [0.60 0.38];
+    % LightFluxParams.whichXYZ = whichXYZ;
+    % LightFluxParams.desiredMaxContrast = 4;
+    % LightFluxParams.desiredBackgroundLuminance = 360;
+    % 
+    % LightFluxParams.search.primaryHeadroom = 0.000;
+    % LightFluxParams.search.primaryTolerance = 1e-6;
+    % LightFluxParams.search.checkPrimaryOutOfRange = true;
+    % LightFluxParams.search.initialLuminanceFactor = 0.2;
+    % LightFluxParams.search.lambda = 0;
+    % LightFluxParams.search.spdToleranceFraction = 30e-5;
+    % LightFluxParams.search.chromaticityTolerance = 0.02;
+    % LightFluxParams.search.optimizationTarget = 'maxContrast';
+    % LightFluxParams.search.primaryHeadroomForInitialMax = 0.000;
+    % LightFluxParams.search.maxSearchIter = 3000;
+    % LightFluxParams.search.verbose = true;
+    
+    LightFluxParams.desiredxy = [0.55 0.40];
     LightFluxParams.whichXYZ = whichXYZ;
     LightFluxParams.desiredMaxContrast = 4;
     LightFluxParams.desiredBackgroundLuminance = 360;
-
+    
     LightFluxParams.search.primaryHeadroom = 0.000;
     LightFluxParams.search.primaryTolerance = 1e-6;
     LightFluxParams.search.checkPrimaryOutOfRange = true;
