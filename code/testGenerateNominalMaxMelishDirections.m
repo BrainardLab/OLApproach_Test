@@ -113,29 +113,7 @@ if (TEST_LIGHTFLUX)
                         
     % Parameter adjustment
     
-    % These parameters are pretty good for the BoxB long cable calibration.
-    %
-    % LightFluxParams.desiredxy = [0.595,0.388];
-    % LightFluxParams.whichXYZ = whichXYZ;
-    % LightFluxParams.desiredMaxContrast = 4;
-    % LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
-    % LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
-    % LightFluxParams.backgroundParams.desiredMaxContrast = LightFluxParams.desiredMaxContrast;
-    % 
-    % LightFluxParams.backgroundParams.search.primaryHeadroom = 0.000;
-    % LightFluxParams.backgroundParams.search.primaryTolerance = 1e-6;
-    % LightFluxParams.backgroundParams.search.checkPrimaryOutOfRange = true;
-    % LightFluxParams.backgroundParams.search.initialLuminanceFactor = 0.2;
-    % LightFluxParams.backgroundParams.search.lambda = 0;
-    % LightFluxParams.backgroundParams.search.spdToleranceFraction = 0.0025;
-    % LightFluxParams.backgroundParams.search.chromaticityTolerance = 0.01;
-    % LightFluxParams.backgroundParams.search.optimizationTarget = 'maxContrast';
-    % LightFluxParams.backgroundParams.search.targetContrast = 4;
-    % LightFluxParams.backgroundParams.search.primaryHeadroomForInitialMax = 0.000;
-    % LightFluxParams.backgroundParams.search.maxSearchIter = 3000;
-    % LightFluxParams.backgroundParams.search.verbose = true;
-    
-    % These are pretty good for Box D short cable.  A bit of S cone
+    % These commented out paramters are pretty good for Box D short cable.  A bit of S cone
     % splatter, but reasonable chrom and lum agreement.
     % LightFluxParams.desiredxy = [0.60 0.38];
     % LightFluxParams.whichXYZ = whichXYZ;
@@ -145,7 +123,6 @@ if (TEST_LIGHTFLUX)
     % LightFluxParams.search.primaryHeadroom = 0.000;
     % LightFluxParams.search.primaryTolerance = 1e-6;
     % LightFluxParams.search.checkPrimaryOutOfRange = true;
-    % LightFluxParams.search.initialLuminanceFactor = 0.2;
     % LightFluxParams.search.lambda = 0;
     % LightFluxParams.search.spdToleranceFraction = 30e-5;
     % LightFluxParams.search.chromaticityTolerance = 0.02;
@@ -154,6 +131,8 @@ if (TEST_LIGHTFLUX)
     % LightFluxParams.search.maxSearchIter = 3000;
     % LightFluxParams.search.verbose = true;
     
+    % Compared to the above, these lead to less splatter but are further
+    % off on chromaticity.
     LightFluxParams.desiredxy = [0.55 0.40];
     LightFluxParams.whichXYZ = whichXYZ;
     LightFluxParams.desiredMaxContrast = 4;
@@ -162,7 +141,6 @@ if (TEST_LIGHTFLUX)
     LightFluxParams.search.primaryHeadroom = 0.000;
     LightFluxParams.search.primaryTolerance = 1e-6;
     LightFluxParams.search.checkPrimaryOutOfRange = true;
-    LightFluxParams.search.initialLuminanceFactor = 0.2;
     LightFluxParams.search.lambda = 0;
     LightFluxParams.search.spdToleranceFraction = 30e-5;
     LightFluxParams.search.chromaticityTolerance = 0.02;
