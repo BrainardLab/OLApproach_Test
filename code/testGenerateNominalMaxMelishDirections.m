@@ -129,7 +129,7 @@ if (TEST_LIGHTFLUX)
     % LightFluxParams.search.optimizationTarget = 'maxContrast';
     % LightFluxParams.search.primaryHeadroomForInitialMax = 0.000;
     % LightFluxParams.search.maxSearchIter = 3000;
-    % LightFluxParams.search.verbose = true;
+    % LightFluxParams.search.verbose = false;
     
     % Compared to the above, these lead to less splatter but are further
     % off on chromaticity.
@@ -147,7 +147,7 @@ if (TEST_LIGHTFLUX)
     LightFluxParams.search.optimizationTarget = 'maxContrast';
     LightFluxParams.search.primaryHeadroomForInitialMax = 0.000;
     LightFluxParams.search.maxSearchIter = 3000;
-    LightFluxParams.search.verbose = true;
+    LightFluxParams.search.verbose = false;
 
     [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
         'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
