@@ -82,15 +82,23 @@ directions{nDirections} = 'LightFluxDirection';
 %% Get base light flux direction and background params
 LightFluxParams = OLDirectionParamsFromName('LightFlux_BipolarBase', ...
     'alternateDictionaryFunc', directionAlternateDictionary);
-LightFluxParams.backgroundParams = OLBackgroundParamsFromName(LightFluxParams.backgroundName,...
-                            'alternateDictionaryFunc',backgroundAlternateDictionary);
-                        
+
 %% Parameter adjustment
 LightFluxParams.desiredxy = nativexy;
 LightFluxParams.whichXYZ = whichXYZ;
 LightFluxParams.desiredMaxContrast = 0.8;
-LightFluxParams.backgroundParams.desiredxy = LightFluxParams.desiredxy;
-LightFluxParams.backgroundParams.whichXYZ = whichXYZ;
+LightFluxParams.desiredBackgroundLuminance = 360;
+
+LightFluxParams.search.primaryHeadroom = 0.000;
+LightFluxParams.search.primaryTolerance = 1e-6;
+LightFluxParams.search.checkPrimaryOutOfRange = true;
+LightFluxParams.search.lambda = 0;
+LightFluxParams.search.spdToleranceFraction = 30e-5;
+LightFluxParams.search.chromaticityTolerance = 0.02;
+LightFluxParams.search.optimizationTarget = 'maxContrast';
+LightFluxParams.search.primaryHeadroomForInitialMax = 0.000;
+LightFluxParams.search.maxSearchIter = 3000;
+LightFluxParams.search.verbose = true;
 
 %% Generate
 [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
