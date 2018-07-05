@@ -37,7 +37,12 @@ testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04
 %}
 %{
 testGenerateNominalMaxMelishDirections('BoxDLiquidShortCableCEyePiece2_ND01', 32);
+testGenerateNominalMaxMelishDirections('BoxDLiquidShortCableDEyePiece1_ND03', 32);
 %}
+%{
+testGenerateNominalMaxMelishDirections('BoxALiquidLightGuideCEyePiece2ND01', 32);
+%}
+
 
 %% Close figures hanging around
 close all;
@@ -45,7 +50,7 @@ close all;
 %% Parameters
 %
 % Always test MAXLMS because we use that to get a common set of receptors.
-TEST_MAXMEL = true;
+TEST_MAXMEL = false;
 TEST_LIGHTFLUX = true;
 
 % Which cmfs to use
@@ -114,21 +119,27 @@ if (TEST_LIGHTFLUX)
     % Parameter adjustment
     
     % These are the parameters we thought we'd start with.
-    LightFluxParams.desiredxy = [0.60 0.38];
+    %LightFluxParams.desiredxy = [0.60 0.38];
+    %LightFluxParams.desiredxy = [0.5959 0.3855];
+    LightFluxParams.desiredxy = [0.4 0.38];
     LightFluxParams.whichXYZ = whichXYZ;
     LightFluxParams.desiredMaxContrast = 4;
-    LightFluxParams.desiredBackgroundLuminance = 360;
+    %LightFluxParams.desiredBackgroundLuminance = 360;      % Box D orig
+    %LightFluxParams.desiredBackgroundLuminance = 221.45;    % Box D new
+    LightFluxParams.desiredBackgroundLuminance = 1100;    % Box A
     
     LightFluxParams.search.primaryHeadroom = 0.000;
     LightFluxParams.search.primaryTolerance = 1e-6;
     LightFluxParams.search.checkPrimaryOutOfRange = true;
     LightFluxParams.search.lambda = 0;
-    LightFluxParams.search.spdToleranceFraction = 30e-5;
-    LightFluxParams.search.chromaticityTolerance = 0.02;
-    LightFluxParams.search.optimizationTarget = 'maxContrast';
+    %LightFluxParams.search.spdToleranceFraction = 30e-5;
+    LightFluxParams.search.spdToleranceFraction = 30e-3;
+    LightFluxParams.search.chromaticityTolerance = 0.04;
+    %LightFluxParams.search.optimizationTarget = 'maxContrast';
+    LightFluxParams.search.optimizationTarget = 'maxLum';
     LightFluxParams.search.primaryHeadroomForInitialMax = 0.000;
     LightFluxParams.search.maxSearchIter = 3000;
-    LightFluxParams.search.verbose = false;
+    LightFluxParams.search.verbose = true;
     
     % Compared to the above, these lead to less splatter but are further
     % off on chromaticity.
