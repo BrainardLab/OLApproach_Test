@@ -123,14 +123,12 @@ for dd = 1:length(directions)
     
     fprintf('<strong>%s</strong>\n', directions{dd});
     
-    % Grab the relevant contrast information from the OLDirection
-    receptorContrasts = direction.ToDesiredReceptorContrast(background,receptors);
-    %receptorContrasts = direction.describe.validation.contrastDesired;
-    %postreceptoralContrasts = direction.describe.validation.postreceptoralContrastDesired;
-    
-    % Report of receptoral contrast
+    % Grab the relevant contrast information from the OLDirection object an
+    % and report. Keep pos and neg contrast explicitly separate.
+    [~, excitations, excitationDiffs] = direction.ToDesiredReceptorContrast(background,receptors);  
     for j = 1:size(receptors,1)
-        fprintf('  * <strong>%s</strong>: contrast = %0.1f%%\n',receptorStrings{j},100*receptorContrasts(j));
+        fprintf('  * <strong>%s</strong>: contrast pos = %0.1f%%\n',receptorStrings{j},100*excitationDiffs(j,1)/excitations(j,1));
+        fprintf('  * <strong>%s</strong>: contrast neg = %0.1f%%\n',receptorStrings{j},100*excitationDiffs(j,2)/excitations(j,1));
     end
     
     % Report on postreceptoral contrast
