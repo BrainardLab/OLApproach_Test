@@ -82,7 +82,6 @@ params.directionsYoked = [1];
 params.directionsYokedAbs = [0];
 params.name = OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
-    % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
 end
 
@@ -117,7 +116,6 @@ params.search.verbose = false;
 
 params.name = OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
-    % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
 end
 
@@ -152,12 +150,11 @@ params.search.verbose = false;
 
 params.name = OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
-    % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
 end
 
 
-%% LightFluxDirected_chrom_275_60_400
+%% LightFluxDirected_chrom_275_60_4000
 % Background to allow maximum unipolar contrast LightFlux modulations
 %   Field size: 27.5 deg
 %   Pupil diameter: 6 mm
@@ -188,7 +185,6 @@ params.search.verbose = true;
 
 params.name = OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
-    % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
 end
 

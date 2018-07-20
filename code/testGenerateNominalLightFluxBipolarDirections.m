@@ -1,14 +1,11 @@
-function [LightFluxDirection_330_330] = testGenerateNominalLightFluxBipolarDirections(calibrationType, observerAge)
+function [LightFluxDirection] = testGenerateNominalLightFluxBipolarDirections(calibrationType, observerAge)
 % Function to compute nominal backgrounds and directions based on
 % calibration type and subject age.  This version is used for developing
 % and testing bipolar light flux modulations.
-
+%
 % Input:
 %   - calibrationType: string describing the calibration from which we want
-%       to generate nominal directionStructs. The relevant calibrations for
-%       Box B are:
-%            'BoxBRandomizedLongCableAEyePiece1_ND04'
-%            'BoxBShortLiquidLightGuideDEyePiece1_ND04'
+%       to generate nominal directionStructs. 
 %   - observerAge: age of fake subject for whom we're generating these
 %       nominal directionStructs
 %
@@ -23,17 +20,13 @@ function [LightFluxDirection_330_330] = testGenerateNominalLightFluxBipolarDirec
 %{
 testGenerateNominalLightFluxBipolarDirections('BoxBRandomizedLongCableAEyePiece1_ND04', 32);
 %}
-%{
-testGenerateNominalLightFluxBipolarDirections('BoxDRandomizedLongCableBEyePiece2_ND01', 32);
-%}
 
 %% Parameters
 whichXYZ = 'xyzCIEPhys10';
 
 %% Define altnernate dictionary functions.
-backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Test';
-directionAlternateDictionary = 'OLDirectionParamsDictionary_Test';
-waveformAlternateDictionary = 'OLWaveformParamsDictionary_Test';
+backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Bipolar';
+directionAlternateDictionary = 'OLDirectionParamsDictionary_Bipolar';
 
 %% Set some stuff up
 % set up the calibrationStructure
@@ -65,16 +58,6 @@ protocolParams.simulate.makePlots = false;
 % Make the oneLight object
 ol = OneLight('simulate',protocolParams.simulate.oneLight,'plotWhenSimulating',protocolParams.simulate.makePlots); drawnow;
 
-% Need receptors to validate. Light flux objects don't
-% currently have them, so making a receptor direction object
-% to get them.
-MaxLMSParams = OLDirectionParamsFromName('MaxLMS_unipolar_275_60_667', ...
-    'alternateDictionaryFunc', directionAlternateDictionary);
-[MaxLMSDirection, MaxLMSBackground] = OLDirectionNominalFromParams(MaxLMSParams, cal, ...
-    'observerAge',protocolParams.observerAgeInYrs, ...
-    'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
-receptors = MaxLMSDirection.describe.directionParams.T_receptors;
-
 %% Light flux at one chrom
 nDirections = nDirections+1;
 directions{nDirections} = 'LightFluxDirection';
@@ -87,7 +70,7 @@ LightFluxParams = OLDirectionParamsFromName('LightFlux_BipolarBase', ...
 LightFluxParams.desiredxy = nativexy;
 LightFluxParams.whichXYZ = whichXYZ;
 LightFluxParams.desiredMaxContrast = 0.8;
-LightFluxParams.desiredBackgroundLuminance = 360;
+LightFluxParams.desiredLum = 360;
 
 LightFluxParams.search.primaryHeadroom = 0.000;
 LightFluxParams.search.primaryTolerance = 1e-6;
@@ -106,16 +89,13 @@ LightFluxParams.search.verbose = true;
 
 %% Simulate validation to easily determine the contrast in our nominal OLDirections
 %
-% Assuming that all directions use same receptors as MaxLMS.  OK for
-% testing here.
-receptorStrings = MaxLMSDirection.describe.directionParams.photoreceptorClasses;
-LightFluxDirection.describe.validation = OLValidateDirection(LightFluxDirection,LightFluxBackground,ol,radiometer,...
+% Assuming that all directions use same receptors.
+receptorStrings = {'LConeTabulatedAbsorbance','MConeTabulatedAbsorbance','SConeTabulatedAbsorbance','Melanopsin'};
+receptors = GetHumanPhotoreceptorSS( LightFluxDirection.calibration.describe.S,receptorStrings,27.5,32,6,[],[]);
+LightFluxDirection.describe.validation = OLValidateDirection(LightFluxDirection,LightFluxBackground,ol,radiometer, ...
     'receptors',receptors);
 
-%% Load XYZ functions according to chosen type
-
 %% Report on nominal contrasts
-postreceptoralStrings = {'L+M+S', 'L-M', 'S-(L+M)'};
 fprintf('<strong>%s</strong>, observer age %d\n',calibrationType, observerAge);
 for dd = 1:length(directions)
     direction = eval(directions{dd});
@@ -130,13 +110,6 @@ for dd = 1:length(directions)
         fprintf('  * <strong>%s</strong>: contrast pos = %0.1f%%\n',receptorStrings{j},100*excitationDiffs(j,1)/excitations(j,1));
         fprintf('  * <strong>%s</strong>: contrast neg = %0.1f%%\n',receptorStrings{j},100*excitationDiffs(j,2)/excitations(j,1));
     end
-    
-    % Report on postreceptoral contrast
-    % NCombinations = size(postreceptoralContrasts, 1);
-    % fprintf('\n');
-    % for ii = 1:NCombinations
-    %     fprintf('   * <strong>%s</strong>: contrast = %0.1f%%\n',postreceptoralStrings{ii},100*postreceptoralContrasts(ii));
-    % end
     
     % Chromaticity and luminance
     backgroundxyY = XYZToxyY(T_xyz*OLPrimaryToSpd(cal,background.differentialPrimaryValues));
