@@ -51,7 +51,6 @@ whichXYZ = 'xyzCIEPhys10';
 %% Define altnernate dictionary functions.
 backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Test';
 directionAlternateDictionary = 'OLDirectionParamsDictionary_Test';
-waveformAlternateDictionary = 'OLWaveformParamsDictionary_Test';
 
 %% Set up the calibrationStructure
 protocolParams.calibrationType = calibrationType;
