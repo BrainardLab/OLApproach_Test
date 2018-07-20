@@ -30,19 +30,8 @@ function [MaxLMSDirection, MaxMelDirection, LightFluxDirection] = testGenerateNo
 
 % Examples:
 %{
-testGenerateNominalMaxMelishDirections('BoxBRandomizedLongCableAEyePiece1_ND04', 32);
+testGenerateNominalMaxMelishDirections('BoxALiquidLightGuideCEyePiece2ND09', 32);
 %}
-%{
-testGenerateNominalMaxMelishDirections('BoxBShortLiquidLightGuideDEyePiece1_ND04', 32);
-%}
-%{
-testGenerateNominalMaxMelishDirections('BoxDLiquidShortCableCEyePiece2_ND01', 32);
-testGenerateNominalMaxMelishDirections('BoxDLiquidShortCableDEyePiece1_ND03', 32);
-%}
-%{
-testGenerateNominalMaxMelishDirections('BoxALiquidLightGuideCEyePiece2ND01', 32);
-%}
-
 
 %% Close figures hanging around
 close all;
@@ -54,6 +43,7 @@ TEST_MAXLMS_CHROM = true;
 TEST_MAXMEL = true;
 TEST_MAXMEL_CHROM = true;
 TEST_LIGHTFLUX = true;
+TEST_LIGHTFLUX_CHROM = true;
 
 % Which cmfs to use
 whichXYZ = 'xyzCIEPhys10';
@@ -63,8 +53,7 @@ backgroundAlternateDictionary = 'OLBackgroundParamsDictionary_Test';
 directionAlternateDictionary = 'OLDirectionParamsDictionary_Test';
 waveformAlternateDictionary = 'OLWaveformParamsDictionary_Test';
 
-%% Set some stuff up
-% set up the calibrationStructure
+%% Set up the calibrationStructure
 protocolParams.calibrationType = calibrationType;
 cal = OLGetCalibrationStructure('CalibrationType',protocolParams.calibrationType,'CalibrationDate','latest');
 nDirections = 0;
@@ -136,54 +125,21 @@ if (TEST_LIGHTFLUX)
     nDirections = nDirections+1;
     directions{nDirections} = 'LightFluxDirection';
     
-    LightFluxParams = OLDirectionParamsFromName('LightFlux_UnipolarBase', ...
-        'alternateDictionaryFunc', directionAlternateDictionary);
-                        
-    % Parameter adjustment
-    
-    % These are the parameters we thought we'd start with.
-    LightFluxParams.desiredxy = [0.60 0.38];
-    %LightFluxParams.desiredxy = [0.5959 0.3855];
-    % LightFluxParams.desiredxy = [0.4 0.38];
-    LightFluxParams.whichXYZ = whichXYZ;
-    LightFluxParams.desiredMaxContrast = 4;
-    %LightFluxParams.desiredBackgroundLuminance = 360;      % Box D orig
-    %LightFluxParams.desiredBackgroundLuminance = 221.45;   % Box D new
-    LightFluxParams.desiredBackgroundLuminance = 1100;      % Box A
-    
-    LightFluxParams.search.primaryHeadroom = 0.000;
-    LightFluxParams.search.primaryTolerance = 1e-6;
-    LightFluxParams.search.checkPrimaryOutOfRange = true;
-    LightFluxParams.search.lambda = 0;
-    %LightFluxParams.search.spdToleranceFraction = 30e-5;
-    LightFluxParams.search.spdToleranceFraction = 30e-3;
-    LightFluxParams.search.chromaticityTolerance = 0.03;
-    LightFluxParams.search.optimizationTarget = 'maxContrast';
-    %LightFluxParams.search.optimizationTarget = 'maxLum';
-    LightFluxParams.search.primaryHeadroomForInitialMax = 0.000;
-    LightFluxParams.search.maxSearchIter = 3000;
-    LightFluxParams.search.verbose = false;
-    
-    % Compared to the above, these lead to less splatter but are further
-    % off on chromaticity.
-    % LightFluxParams.desiredxy = [0.55 0.40];
-    % LightFluxParams.whichXYZ = whichXYZ;
-    % LightFluxParams.desiredMaxContrast = 4;
-    % LightFluxParams.desiredBackgroundLuminance = 360;
-    % 
-    % LightFluxParams.search.primaryHeadroom = 0.000;
-    % LightFluxParams.search.primaryTolerance = 1e-6;
-    % LightFluxParams.search.checkPrimaryOutOfRange = true;
-    % LightFluxParams.search.lambda = 0;
-    % LightFluxParams.search.spdToleranceFraction = 30e-5;
-    % LightFluxParams.search.chromaticityTolerance = 0.02;
-    % LightFluxParams.search.optimizationTarget = 'maxContrast';
-    % LightFluxParams.search.primaryHeadroomForInitialMax = 0.000;
-    % LightFluxParams.search.maxSearchIter = 3000;
-    % LightFluxParams.search.verbose = false;
-
-    [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
-        'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
+    if (~TEST_LIGHTFLUX_CHROM)
+        LightFluxParams = OLDirectionParamsFromName('LightFlux_Unipolar_4000', ...
+            'alternateDictionaryFunc', directionAlternateDictionary);
+        
+        [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
+            'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
+    else
+        % "LightFlux specify chromaticity version
+        LightFluxParams = OLDirectionParamsFromName('LightFlux_chrom_unipolar_275_60_4000', ...
+            'alternateDictionaryFunc', directionAlternateDictionary);
+        
+        [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
+            'observerAge',protocolParams.observerAgeInYrs, ...
+            'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
+    end
 end
 
 %% Simulate validation to easily determine the contrast in our nominal OLDirections

@@ -98,8 +98,6 @@ params.photoreceptorClasses = {'LConeTabulatedAbsorbance','MConeTabulatedAbsorba
 params.backgroundName = 'LMSDirected_chrom_275_60_4000';
 
 % These are the options that go to OLPrimaryInvSolveChrom
-params.desiredxy = [0.59,0.39];
-params.desiredLum = [];
 params.targetContrast = [params.baseModulationContrast params.baseModulationContrast params.baseModulationContrast 0];
 params.search.primaryHeadroom = 0.005;
 params.search.primaryTolerance = 1e-6;
@@ -134,8 +132,6 @@ params.photoreceptorClasses = {'LConeTabulatedAbsorbance','MConeTabulatedAbsorba
 params.backgroundName = 'MelDirected_chrom_275_60_4000';
 
 % These are the options that go to OLPrimaryInvSolveChrom
-params.desiredxy = [0.59,0.39];
-params.desiredLum = [];
 params.targetContrast = [0 0 0 params.baseModulationContrast];
 params.search.primaryHeadroom = 0.005;
 params.search.primaryTolerance = 1e-6;
@@ -155,15 +151,80 @@ if OLDirectionParamsValidate(params)
     dictionary(params.name) = params;
 end
 
-%% LightFlux_UnipolarBase
+%% LightFlux_chrom_unipolar_275_60_400
+% Direction for maximum unipolar contrast "LightFlux" step
+%   Field size: 27.5 deg
+%   Pupil diameter: 6 mm
+%   Unipolar contrast: 400%
+
+params = OLDirectionParams_Unipolar;
+params.baseName = 'LightFlux_chrom';
+params.baseModulationContrast = 4;
+params.fieldSizeDegrees = 27.5;
+params.pupilDiameterMm = 6.0;
+params.photoreceptorClasses = {'LConeTabulatedAbsorbance','MConeTabulatedAbsorbance','SConeTabulatedAbsorbance','Melanopsin'};
+params.backgroundName = 'LightFlux_chrom_275_60_4000';
+
+% These are the options that go to OLPrimaryInvSolveChrom
+params.targetContrast = [params.baseModulationContrast params.baseModulationContrast params.baseModulationContrast params.baseModulationContrast];
+params.search.primaryHeadroom = 0.005;
+params.search.primaryTolerance = 1e-6;
+params.search.checkPrimaryOutOfRange = true;
+params.search.lambda = 0;
+params.search.whichSpdToPrimaryMin = 'leastSquares';
+params.search.chromaticityTolerance = 0.03;
+params.search.lumToleranceFraction = 0.6;
+params.search.optimizationTarget = 'receptorContrast';
+params.search.primaryHeadroomForInitialMax = 0.005;
+params.search.maxSearchIter = 3000;
+params.search.verbose = true;
+
+params.name = OLDirectionNameFromParams(params);
+if OLDirectionParamsValidate(params)
+    % All validations OK. Add entry to the dictionary.
+    dictionary(params.name) = params;
+end
+
+
+%% LightFlux_Unipolar_4000
 %
 % Base params for unipolar light flux directions
 params = OLDirectionParams_LightFluxChrom;
 params.baseName = 'LightFlux';
 params.polarType = 'unipolar';
-params.desiredxy = [0.59,0.39];
+params.desiredxy = [0.58 0.39];
 params.whichXYZ = 'xyzCIEPhys10';
 params.desiredMaxContrast = 4;
+params.desiredBackgroundLuminance = 210;
+
+% These are the options that go to OLPrimaryInvSolveChrom
+params.search.primaryHeadroom = 0.000;
+params.search.primaryTolerance = 1e-6;
+params.search.checkPrimaryOutOfRange = true;
+params.search.lambda = 0;
+params.search.whichSpdToPrimaryMin = 'leastSquares';
+params.search.spdToleranceFraction = 0.2;
+params.search.chromaticityTolerance = 0.03;
+params.search.optimizationTarget = 'maxContrast';
+params.search.primaryHeadroomForInitialMax = 0.000;
+params.search.maxSearchIter = 3000;
+params.search.verbose = false;
+
+params.name = 'LightFlux_Unipolar_4000';
+if OLDirectionParamsValidate(params)
+    % All validations OK. Add entry to the dictionary.
+    dictionary(params.name) = params;
+end
+
+%% LightFlux_BipolarBase
+%
+% Base params for light flux bipolar directions
+params = OLDirectionParams_LightFluxChrom;
+params.baseName = 'LightFlux';
+params.polarType = 'bipolar';
+params.desiredxy = [0.33 0.33];
+params.whichXYZ = 'xyzCIEPhys10';
+params.desiredMaxContrast = 0.8;
 params.desiredBackgroundLuminance = 500;
 
 % These are the options that go to OLPrimaryInvSolveChrom
@@ -177,37 +238,7 @@ params.search.chromaticityTolerance = 0.0001;
 params.search.optimizationTarget = 'maxLum';
 params.search.primaryHeadroomForInitialMax = 0.005;
 params.search.maxSearchIter = 300;
-params.search.verbose = false;
-
-params.name = 'LightFlux_UnipolarBase';
-if OLDirectionParamsValidate(params)
-    % All validations OK. Add entry to the dictionary.
-    dictionary(params.name) = params;
-end
-
-%% LightFlux_BipolarBase
-%
-% Base params for light flux bipolar directions
-params = OLDirectionParams_LightFluxChrom;
-params.baseName = 'LightFlux';
-params.polarType = 'bipolar';
-params.desiredxy = [0.33,0.33];
-params.whichXYZ = 'xyzCIEPhys10';
-params.desiredMaxContrast = 0.8;
-params.desiredBackgroundLuminance = 500;
-
-% These are the options that go to OLPrimaryInvSolveChrom
-params.search.primaryHeadRoom = 0.005;
-params.search.primaryTolerance = 1e-6;
-params.search.checkPrimaryOutOfRange = true;
-params.search.lambda = 0;
-params.search.whichSpdToPrimaryMin = 'leastSquares';
-params.search.spdToleranceFraction = 0.005;
-params.search.chromaticityTolerance = 0.0001;
-params.search.optimizationTarget = 'maxLum';
-params.search.primaryHeadroomForInitialMax = 0.005;
-params.search.maxSearchIter = 300;
-params.search.verbose = false;
+params.search.verbose = true;
 
 params.name = 'LightFlux_BipolarBase';
 if OLDirectionParamsValidate(params)
