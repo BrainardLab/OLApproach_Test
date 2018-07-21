@@ -30,7 +30,7 @@ function [directions] = testGenerateColorDirections(calibrationType, observerAge
 %
 % Examples:
 %{
-testGenerateColorDirections('BoxALiquidLightGuideCEyePiece2ND09', 32);
+testGenerateColorDirections('BoxALiquidLightGuideCEyePiece2_ND09', 32);
 %}
 
 %% Parameters

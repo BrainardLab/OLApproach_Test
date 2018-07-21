@@ -1,28 +1,36 @@
 function [MaxLMSDirection, MaxMelDirection, LightFluxDirection] = testGenerateNominalMaxMelishDirections(calibrationType, observerAge)
-% Function to compute nominal backgrounds and directions based on
-% calibration type and subject age.  This version is used for developing
-% and testing modulations for MaxMel type experiments.
-
+% Compute nominal backgrounds and directions based for MaxMel type experiments.
+%
+% Syntax:
+%    [MaxLMSDirection, MaxMelDirection, LightFluxDirection] = testGenerateNominalMaxMelishDirections(calibrationType, observerAge)
+%
+% Description:
+%    Use our machinery to produce backgrounds and directions for MaxMel,
+%    MaxLMS and LightFlux unipolar modulations.
+%
+%    The script illustrates two different ways we can do things.  One is to
+%    make a bipolar modulation and then take the low end as the background
+%    and the high end as the unipolar modulation.
+%
+%    The other is to search on a background that optimizes unipolar
+%    contrast. We can put constraints on chromaticity and luminance in this
+%    one.
+%
+%    The two ways are complementary, and both have various tolerance
+%    parameters that you need to futz with to get modulations that you
+%    want.
+%
 % Input:
-%   - calibrationType: string describing the calibration from which we want
-%       to generate nominal directionStructs. The relevant calibrations for
-%       Box B are:
-%            'BoxBRandomizedLongCableAEyePiece1_ND04'
-%            'BoxBShortLiquidLightGuideDEyePiece1_ND04'
-%   - observerAge: age of fake subject for whom we're generating these
-%       nominal directionStructs
+%   calibrationTyp       String describing the calibration from which we
+%                        want to generate directions. Example
+%                        'BoxALiquidLightGuideCEyePiece2_ND09'
+%   observerAge          Age of subject for whom we're generating these
+%                        directions.
 %
 % Output:
-%   - directionStructs (MaxLMS, MaxMel, and LightFlux): our Squint
-%       experiment uses three stimulus types, and the code produces the
-%       nominal directionStruct for each type. The relevant contrast
-%       information is stored within as
-%       directionStruct.describe.validation.predictedContrast and
-%       directionStruct.describe.validation.predictedContrastPostreceptoral.
-%       Note that these have the same values as the
-%       actualContrast/actualContrastPostReceptoral because we're not doing
-%       any direction correction or performing actual validation
-%       measurements
+%   MaxLMSDirection      MaxLMS direction object
+%   MaxMelDirection      MaxMel direction object
+%   LightFluxDirection   LightFlux direction object
 
 % History:
 %   04/01/18  dhb  Starting working on it starting with jv version from
@@ -30,7 +38,7 @@ function [MaxLMSDirection, MaxMelDirection, LightFluxDirection] = testGenerateNo
 
 % Examples:
 %{
-testGenerateNominalMaxMelishDirections('BoxALiquidLightGuideCEyePiece2ND09', 32);
+testGenerateNominalMaxMelishDirections('BoxALiquidLightGuideCEyePiece2_ND09', 32);
 %}
 
 %% Close figures hanging around
@@ -125,13 +133,14 @@ if (TEST_LIGHTFLUX)
     directions{nDirections} = 'LightFluxDirection';
     
     if (~TEST_LIGHTFLUX_CHROM)
+        % Light flux based on bipolar optimization
         LightFluxParams = OLDirectionParamsFromName('LightFlux_Unipolar_4000', ...
             'alternateDictionaryFunc', directionAlternateDictionary);
         
         [LightFluxDirection, LightFluxBackground] = OLDirectionNominalFromParams(LightFluxParams, cal, ...
             'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
     else
-        % "LightFlux specify chromaticity version
+        % LightFlux specify chromaticity version
         LightFluxParams = OLDirectionParamsFromName('LightFlux_chrom_unipolar_275_60_4000', ...
             'alternateDictionaryFunc', directionAlternateDictionary);
         
@@ -141,7 +150,7 @@ if (TEST_LIGHTFLUX)
     end
 end
 
-%% Simulate validation to easily determine the contrast in our nominal OLDirections
+%% Simulate validation to determine the contrasts in our nominal directions
 %
 % Assuming that all directions use same receptors as MaxLMS.  OK for
 % testing here.
@@ -168,8 +177,7 @@ for dd = 1:length(directions)
     fprintf('<strong>%s</strong>\n', directions{dd});
     
     % Grab the relevant contrast information from the OLDirection
-    receptorContrasts = direction.ToDesiredReceptorContrast(background,receptors);
-    %receptorContrasts = direction.describe.validation.contrastDesired;
+    receptorContrasts = direction.describe.validation.contrastDesired;
     postreceptoralContrasts = direction.describe.validation.postreceptoralContrastDesired;
     
     % Report of receptoral contrast

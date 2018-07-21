@@ -174,7 +174,7 @@ params.search.lumToleranceFraction = 0.6;
 params.search.optimizationTarget = 'receptorContrast';
 params.search.primaryHeadroomForInitialMax = 0.005;
 params.search.maxSearchIter = 3000;
-params.search.verbose = true;
+params.search.verbose = false;
 
 params.name = OLDirectionNameFromParams(params);
 if OLDirectionParamsValidate(params)

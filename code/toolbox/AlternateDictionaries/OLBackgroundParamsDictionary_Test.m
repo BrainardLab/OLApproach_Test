@@ -56,7 +56,6 @@ params.directionsYoked = [0];
 params.directionsYokedAbs = [0];
 params.name = OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
-    % All validations OK. Add entry to the dictionary.
     dictionary(params.name) = params;
 end
 
@@ -181,7 +180,7 @@ params.search.lumToleranceFraction = 0.6;
 params.search.optimizationTarget = 'receptorContrast';
 params.search.primaryHeadroomForInitialMax = 0.005;
 params.search.maxSearchIter = 3000;
-params.search.verbose = true;
+params.search.verbose = false;
 
 params.name = OLBackgroundNameFromParams(params);
 if OLBackgroundParamsValidate(params)
