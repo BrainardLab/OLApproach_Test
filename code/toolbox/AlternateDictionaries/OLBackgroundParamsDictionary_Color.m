@@ -27,9 +27,7 @@ function dictionary = OLBackgroundParamsDictionary_Color()
 %    OLMakeDirectionNominalPrimaries.
 
 % History:
-%    03/31/18  dhb  Created from OneLightToolbox version. Remove
-%                   alternateDictionaryFunc key/value pair, since this
-%                   would be called as the result of that.
+%    07/20/18  dhb  Created. It's actually empty, but we want the file to exist.
 
 % Initialize dictionary
 dictionary = containers.Map();
