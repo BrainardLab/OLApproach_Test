@@ -99,6 +99,11 @@ ConeDirectedBackgroundParams.desiredxy = targetxyY(1:2);
 ConeDirectedBackgroundParams.desiredLum = targetxyY(3);
 
 % Get the background.  This also makes a light flux modulation, but we ignore that.
+%
+% Indeed, what we're doing here is overloading the function that can make a
+% light flux modulation just to get a desired background. The particular
+% parameters are asking for a very low contrast light flux modulation with
+% specified background properties.
 [~, ConeDirectedBackground] = OLDirectionNominalFromParams(ConeDirectedBackgroundParams, cal, ...
     'alternateBackgroundDictionaryFunc', backgroundAlternateDictionary);
 
