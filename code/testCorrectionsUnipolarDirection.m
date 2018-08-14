@@ -36,7 +36,9 @@ OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), on
 OLValidateDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'pre-correction');
 
 %% Correct
-OLCorrectDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'legacyMode', legacyMode);
+OLCorrectDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors,...
+    'legacyMode',true, ...
+    'smoothness',.01);
 
 %% Validate post-correction
 OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
