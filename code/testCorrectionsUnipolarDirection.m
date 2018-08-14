@@ -1,5 +1,7 @@
-%% Test how well corrections of OLDirection_bipolar works
+%% Test how well corrections of OLDirection_Unipolar works
+clear all; close all;
 simulate = true;
+legacyMode = false;
 
 %% Get calibration
 calibrationApproach = 'Psychophysics'; % test on psychophysics rig
@@ -34,7 +36,7 @@ OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), on
 OLValidateDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'pre-correction');
 
 %% Correct
-OLCorrectDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors);
+OLCorrectDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'legacyMode', legacyMode);
 
 %% Validate post-correction
 OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
