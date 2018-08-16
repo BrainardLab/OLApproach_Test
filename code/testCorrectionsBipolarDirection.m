@@ -3,25 +3,19 @@ clear all; close all;
 simulate = true;
 legacyMode = false;
 
-%% Get calibration
-calibrationApproach = 'Psychophysics'; % test on psychophysics rig
-calibration = OLGetCalibrationStructure('CalibrationDate','latest',...
-    'CalibrationFolder',getpref('OLApproach_Psychophysics','OneLightCalDataPath'));
-
 %% Open hardware
 onelight = OneLight('simulate',simulate,'plotWhenSimulating',false); drawnow;
 if ~simulate
-    radiometerPauseDuration = 0;
     onelight.setAll(true);
-    commandwindow;
-    fprintf('- Focus the radiometer and press enter to pause %d seconds and start measuring.\n', radiometerPauseDuration);
-    input('');
-    onelight.setAll(false);
-    pause(radiometerPauseDuration);
     radiometer = OLOpenSpectroRadiometerObj('PR-670');
 else
     radiometer = [];
 end
+
+%% Get calibration
+calibrationApproach = 'Psychophysics'; % test on psychophysics rig
+calibration = OLGetCalibrationStructure('CalibrationDate','latest',...
+    'CalibrationFolder',getpref('OLApproach_Psychophysics','OneLightCalDataPath'));
 
 %% Generate direction
 observerAge = 32;
@@ -36,7 +30,8 @@ OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), on
 OLValidateDirection(MaxMelBipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'pre-correction');
 
 %% Correct
-OLCorrectDirection(MaxMelBipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors);
+OLCorrectDirection(MaxMelBipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors,...
+    'smoothness',.01);
 
 %% Validate post-correction
 OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
