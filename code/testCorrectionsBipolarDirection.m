@@ -31,44 +31,16 @@ OLValidateDirection(MaxMelBipolar, MaxMelBackground, onelight, radiometer, 'rece
 
 %% Correct
 OLCorrectDirection(MaxMelBipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors,...
-    'smoothness',.01);
+    'smoothness',.001);
 
 %% Validate post-correction
 OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
 OLValidateDirection(MaxMelBipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
 
-%% Pull out SPD, contrast
-desiredSPD = MaxMelBipolar.describe.validation(1).SPDcombined.desiredSPD;
-desiredSPDBackground = MaxMelBipolar.describe.validation(1).SPDbackground.desiredSPD;
-desiredContrast = MaxMelBipolar.describe.validation(1).contrastDesired(:,[1,3]);
-
+%% Pull out validations
 preValidation = MaxMelBipolar.describe.validation(1); 
-preValidationSPDBackground = preValidation.SPDbackground.measuredSPD;
-preValidationSPD = preValidation.SPDcombined.measuredSPD;
-preValidationContrast = preValidation.contrastActual(:,[1,3]);
-
 postValidation = MaxMelBipolar.describe.validation(2);
-postValidationSPD = postValidation.SPDcombined.measuredSPD;
-postValidationSPDBackground = postValidation.SPDbackground.measuredSPD;
-postValidationContrast = postValidation.contrastActual(:,[1,3]);
 
 %% Plot
-figure();
-subplot(2,1,1); hold on;
-plot(desiredSPDBackground,'k:');
-plot(preValidationSPDBackground,'r:');
-plot(postValidationSPDBackground,'g:');
-
-plot(desiredSPD,'k-');
-plot(preValidationSPD,'r-');
-plot(postValidationSPD,'g-');
-
-legend({'background desired','background pre','background corrected','combined desired','combined pre','combined corrected'});
-
-subplot(2,1,2); hold on;
-boxplot(desiredContrast','color','k');
-boxplot(preValidationContrast','color','r');
-boxplot(postValidationContrast','color','g');
-line(xlim,[0 0],'color','k','linestyle',':');
-xticks([1 2 3 4]);
-xticklabels({'L','M','S','Mel'});
+OLPlotValidationDirectionBipolar(preValidation);
+OLPlotValidationDirectionBipolar(postValidation);

@@ -32,42 +32,16 @@ OLValidateDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'rec
 %% Correct
 OLCorrectDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors,...
     'legacyMode',legacyMode, ...
-    'smoothness',.01);
+    'smoothness',.001);
 
 %% Validate post-correction
 OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
 OLValidateDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
 
-%% Pull out SPD, contrast
-desiredSPD = MaxMelUnipolar.describe.validation(1).SPDcombined.desiredSPD;
-desiredSPDBackground = MaxMelUnipolar.describe.validation(1).SPDbackground.desiredSPD;
-desiredContrast = MaxMelUnipolar.describe.validation(1).contrastDesired(:,1);
-
+%% Pull out validations
 preValidation = MaxMelUnipolar.describe.validation(1); 
-preValidationSPDBackground = preValidation.SPDbackground.measuredSPD;
-preValidationSPD = preValidation.SPDcombined.measuredSPD;
-preValidationContrast = preValidation.contrastActual(:,1);
-
 postValidation = MaxMelUnipolar.describe.validation(2);
-postValidationSPD = postValidation.SPDcombined.measuredSPD;
-postValidationSPDBackground = postValidation.SPDbackground.measuredSPD;
-postValidationContrast = postValidation.contrastActual(:,1);
 
 %% Plot
-figure();
-subplot(2,1,1); hold on;
-plot(desiredSPDBackground,'k:');
-plot(preValidationSPDBackground,'r:');
-plot(postValidationSPDBackground,'g:');
-
-plot(desiredSPD,'k-');
-plot(preValidationSPD,'r-');
-plot(postValidationSPD,'g-');
-
-legend({'background desired','background pre','background corrected','combined desired','combined pre','combined corrected'});
-
-subplot(2,1,2); hold on;
-bar([desiredContrast preValidationContrast postValidationContrast]);
-legend({'Desired','Pre','Post'});
-xticks([1 2 3 4]);
-xticklabels({'L','M','S','Mel'});
+OLPlotValidationDirectionUnipolar(preValidation);
+OLPlotValidationDirectionUnipolar(postValidation);
