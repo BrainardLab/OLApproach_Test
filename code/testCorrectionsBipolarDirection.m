@@ -27,6 +27,8 @@ MaxMelBipolar.describe.T_receptors = receptors;
 %% Validate pre-correction
 OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'pre-correction');
 OLValidateDirection(MaxMelBipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'pre-correction');
+preValidation = MaxMelBipolar.describe.validation(1); 
+OLPlotValidationDirectionBipolar(preValidation);
 
 %% Correct
 lightlevelScalar = OLMeasureLightlevelScalar(onelight, calibration, radiometer);
@@ -38,11 +40,5 @@ OLCorrectDirection(MaxMelBipolar, MaxMelBackground, onelight, radiometer, 'recep
 %% Validate post-correction
 OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
 OLValidateDirection(MaxMelBipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
-
-%% Pull out validations
-preValidation = MaxMelBipolar.describe.validation(1); 
 postValidation = MaxMelBipolar.describe.validation(2);
-
-%% Plot
-OLPlotValidationDirectionBipolar(preValidation);
 OLPlotValidationDirectionBipolar(postValidation);
