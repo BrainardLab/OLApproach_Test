@@ -29,8 +29,10 @@ OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), on
 OLValidateDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors, 'label', 'pre-correction');
 
 %% Correct
+lightlevelScalar = OLMeasureLightlevelScalar(onelight, calibration, radiometer);
 OLCorrectDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors,...
     'smoothness',.001,...
+    'lightlevelScalar',lightlevelScalar,...
     'measureStateTrackingSPDs',~simulate,'temperatureProbe',[]);
 
 %% Validate post-correction
