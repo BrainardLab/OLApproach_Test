@@ -1,12 +1,11 @@
 %% Test how well corrections of OLDirection_Unipolar works
 clear all; close all;
 simulate = true;
-legacyMode = false;
 
 %% Open hardware
 onelight = OneLight('simulate',simulate,'plotWhenSimulating',false); drawnow;
 if ~simulate
-    radiometerPauseDuration = 0;
+    onelight.setAll(true);
     radiometer = OLOpenSpectroRadiometerObj('PR-670');
 else
     radiometer = [];
@@ -31,8 +30,8 @@ OLValidateDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'rec
 
 %% Correct
 OLCorrectDirection(MaxMelUnipolar, MaxMelBackground, onelight, radiometer, 'receptors', receptors,...
-    'legacyMode',legacyMode, ...
-    'smoothness',.001);
+    'smoothness',.001,...
+    'measureStateTrackingSPDs',~simulate,'temperatureProbe',[]);
 
 %% Validate post-correction
 OLValidateDirection(MaxMelBackground, OLDirection_unipolar.Null(calibration), onelight, radiometer, 'receptors', receptors, 'label', 'post-correction');
