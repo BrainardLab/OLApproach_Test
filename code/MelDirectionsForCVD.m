@@ -63,9 +63,6 @@ backgroundParams.whichReceptorsToIgnore = whichReceptorsToIgnore;
 backgroundParams.whichReceptorsToIsolate = whichReceptorsToIsolate;
 backgroundParams.whichReceptorsToMinimize = whichReceptorsToMinimize;
 
-% Define target contrast
-backgroundParams.modulationContrast = [4/6];
-
 %% Create optimized background
 background = OLBackgroundNominalFromParams(backgroundParams, calibration);
 
