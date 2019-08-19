@@ -1,7 +1,8 @@
 clear all;
 
 %% Get calibration
-calibration = OLGetCalibrationStructure();
+whichApproach = ['OLApproach_' GetWithDefault('Use calibration for which approach','Squint')];
+calibration = OLGetCalibrationStructure('CalibrationFolder',getpref('OLApproach_Squint','OneLightCalDataPath'));
 
 % Extract wavelength sampling
 S = calibration.describe.S;
