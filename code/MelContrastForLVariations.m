@@ -25,6 +25,7 @@ lambdaMaxShift = [+2 +2 0 0];
 fieldSize = 27.5; % degree visual angle
 pupilDiameter = 6; % mm
 observerAge = 32;
+headroom = 0;
 
 % GetHumanPhotoreceptorSS is being a pain, and won't create the whole set
 % correctly. We'll create them one  at a time to circumvent this:
@@ -67,6 +68,7 @@ backgroundParams.whichReceptorsToIgnore = whichReceptorsToIgnore;
 backgroundParams.whichReceptorsToIsolate = whichReceptorsToIsolate;
 backgroundParams.whichReceptorsToMinimize = whichReceptorsToMinimize;
 backgroundParams.modulationContrast = OLUnipolarToBipolarContrast(18);
+backgroundParams.primaryHeadRoom = headroom;
 
 % Make background
 background = OLBackgroundNominalFromParams(backgroundParams, calibration);
@@ -86,6 +88,7 @@ directionParams.whichReceptorsToIgnore = [whichReceptorsToIgnore{:}];
 directionParams.whichReceptorsToIsolate = [whichReceptorsToIsolate{:}];
 directionParams.whichReceptorsToMinimize = [whichReceptorsToMinimize{:}];
 directionParams.modulationContrast = OLUnipolarToBipolarContrast(18);
+directionParams.primaryHeadRoom = headroom;
 
 % Set background
 directionParams.background = background;
