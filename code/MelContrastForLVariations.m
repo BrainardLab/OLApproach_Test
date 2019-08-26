@@ -14,12 +14,13 @@ S = calibration.describe.S;
 % no M cone, an S cone, and melanopsin.
 photoreceptorClasses = {'LConeTabulatedAbsorbance',...
                         'LConeTabulatedAbsorbance',...
+                        'LConeTabulatedAbsorbance',...
                         'SConeTabulatedAbsorbance',...
                         'Melanopsin'};
 
 % It also takes a parameter lambdaMaxShift: a vector with, in nm, how to
 % shift each receptor lambda max from the base fundamental:
-lambdaMaxShift = [+2 +2 0 0];
+lambdaMaxShift = [-2 0 +2 0 0];
 
 % And some additional params:
 fieldSize = 27.5; % degree visual angle
@@ -41,12 +42,12 @@ plot(MakeItWls(S),T_receptors');
 
 %% Define direction: mel isolating
 % Convert to logical
-isolateLogical = [0 0 0 1]; % isolate Mel, which is 4
-ignoreLogical = [0 0 0 0];
+isolateLogical = [0 0 0 0 1]; % isolate Mel, which is 4
+ignoreLogical = [1 0 0 0 0];
 
 % Convert to indices that SST expects
 whichReceptorsToIsolate = num2cell(find(isolateLogical));
-whichReceptorsToIgnore = num2cell(find(ignoreLogical));
+whichReceptorsToIgnore = {find(ignoreLogical)};
 whichReceptorsToMinimize = {[]};
 if isempty(whichReceptorsToIgnore)
     whichReceptorsToIgnore = {[]};
